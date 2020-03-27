@@ -81,3 +81,15 @@ Les fonctions Assert/exit/atexit
 			- if (*n == NULL)
 				  exit(EXIT_FAILURE);
 			- atexit check le retour d'une fonction pointée en paramètre
+
+Un système monoprocesseur (et non pas monoprocessus, ne pas confondre processus et processeur),
+simule le multitâche en attribuant un temps (un quantum ou temps déterminé à l'avance)
+de traitement pour chaque processus
+
+Exemple :
+La possibilité de lire l'aide en ligne et d'imprimer à la fois sous Word.
+Ce sont deux sous-processus relevant d'un processus qui est associé à l'application Word
+
+Comme chaque processus coûte cher au lancement, sans oublier qu'il va avoir son propre espace
+mémoire, la commutation (passage d'un processus à un autre) ainsi que la communication
+interprocessus (échange d'informations) seront lourdes à gérer.

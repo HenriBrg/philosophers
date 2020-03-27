@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/time.h>
+#include <inttypes.h>
 
 /*
 ** philosophers = nombre de philosophes et de fourchettes
@@ -17,11 +19,11 @@ typedef struct		s_philo
 {
 	int				pos;
 	int				is_eating;
-	int				last_meal;
 	int				meal_count;
 	int				lfork;
 	int				rfork;
-	pthread_mutex_t	mutexphiloeating;
+	uint64_t		last_meal;
+	uint64_t		remainingtime;
 }					t_philo;
 
 typedef struct		s_context
@@ -36,14 +38,14 @@ typedef struct		s_context
 	pthread_mutex_t	*mutexforks;
 	pthread_mutex_t	mutexdeath;
 	pthread_mutex_t	mutexwrite;
-
-
 }					t_context;
 
 t_context		context;
 
-void			putstr(char *str);
-void			putexit(int x, char *str);
+void			putstrfd(char *str, int fd);
 int				ft_atoi(char *str);
+int				initcontext(int ac, char **av);
+void			putuint64_t(int fd, uint64_t timer);
+uint64_t		chrono(void);
 
 #endif

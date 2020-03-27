@@ -1,0 +1,108 @@
+Principalement sur les threads Unix
+https://openclassrooms.com/fr/courses/1513891-la-programmation-systeme-en-c-sous-unix/1514567-les-threads
+--------------------------------------------------------------------------------
+
+Le principal avantage des threads par rapport aux processus, c'est la facilité et la
+rapidité de leur création.
+
+En effet, tous les threads d'un même processus partagent le même espace d'adressage,
+et donc toutes les variables.
+
+Cela évite donc l'allocation de tous ces espaces lors de la création, et il est à noter que,
+sur de nombreux systèmes, la création d'un thread est environ cent fois plus rapide que celle d'un processus.
+
+La communication entre les threads est plus aisée que celle entre les processus,
+pour lesquels on doit utiliser les tubes.
+
+
+pthread_t = typedef d'unsigned long int
+
+int pthread_create(pthread_t * thread, pthread_attr_t * attr, void *(*start_routine) (void *), void *arg);
+
+	- retourne 0 si succès
+	- arg 1 = id du thread
+	- arg 2 = attribut souhaités
+	- arg 3 = pointeur sur fonction a exec dans le thread
+
+
+Le thread principal ne va pas attendre de lui-même que le thread se termine avant d'exécuter le reste de son code
+Pour cela on a :
+
+int pthread_join(pthread_t th, void **thread_return);
+	- arg 1 : id du thread
+	- arg 2 : pour récup la valeur de retour de la fonction passée au thread
+
+La fonction «pthread_join» sert à mettre en attente le programme; tant que le thread créé
+par «pthread_create» n'a pas terminé de s'exécuter. La fonction «pthread_join» est une
+des formes de synchronisation entre les threads. Par défaut dans le standard POSIX,
+tous les threads sont créés dans l'état «joignable» par opposition à l'état «détaché».
+
+int pthread_join (pthread_t th, void ** thread_return);
+La fonction «pthread_join» attend que le thread «th» se termine. La valeur retournée par la
+fonction est «0» si tout est correct. Le pointeur «thread_return» pointe l'emplacement
+où est enregistré la valeur de retour du thread «th». Cette valeur de retour est
+spécifiée à l'aide de la méthode «pthread_exit»
+
+pthread_join() is a blocking call, it will block the calling thread until the other thread ends.
+
+Avec les threads, toutes les variables sont partagées : c'est la mémoire partagée.
+Pour gérer les cas où les threads modifie une même variable, on utilise le mutex (état dispo/verrouillé)
+
+Un mutex est de type : pthread_mutex_t
+
+On distingue la partie non-critique et critique d'un thread
+non-critique : pas besoin de se coordonner
+critique : besoin de se coordonner
+
+Le problème de l”exclusion mutuelle est de trouver un algorithme qui permet de garantir qu’il n’y
+aura jamais deux threads qui simultanément exécuteront les instructions de leur section critique.
+
++ de détail sur la coordination des mutex : algo de Peterson et instructions atomiques https://sites.uclouvain.be/SystInfo/notes/Theorie/html/Threads/threads2.html
+
+Un mutex qui contrôle une ressource peut se trouver dans deux états :
+
+- libre (ou unlocked en anglais). Cet état indique que la ressource est libre et peut être utilisée sans risquer de provoquer une violation d’exclusion mutuelle.
+- réservée (ou locked en anglais). Cet état indique que la ressource associée est actuellement utilisée et qu’elle ne peut pas être utilisée par un autre thread.
+
+Un mutex est toujours associé à une ressource. Cette ressource peut être une variable
+globale comme dans les exemples précédents, mais cela peut aussi être une structure de données plus complexe, une base de données, un fichier,
+
+Un mutex peut être considéré comme une structure de données qui contient deux informations :
+- la valeur actuelle du mutex ( locked ou unlocked)
+- une queue contenant l’ensemble des threads qui sont bloqués en attente du mutex
+
+L’exclusion mutuelle consiste en le respect la propriété de sureté et la propriété de vivacité (https://sites.uclouvain.be/SystInfo/notes/Theorie/html/Threads/threads2.html)
+
+ Un programme est en situation de deadlock lorsque tous ses threads d’exécution sont bloqués
+ et qu’aucun d’entre eux ne peux être débloqué sans exécuter d’instructions d’un des threads bloqués
+ La seule façon de sortir du deadlock est d’arrêter le programme et de le redémarrer
+
+
+
+
+
+ pthread_exit is called from the thread itself to terminate its execution (and return a result) early.
+
+ pthread_join is called from another thread (usually the thread that created it) to wait for a thread
+ to terminate and obtain its return value.
+ It can be called before or after the thread you're waiting for calls pthread_exit.
+ If before, it will wait for the exit to occur. If after, it simply obtains the return value and releases the pthread_t resources.
+
+ pthread_detach can be called from either the thread itself or another thread, and indicates
+ that you don't want the thread's return value or the ability to wait for it to finish.
+ This is useful because otherwise, until you call pthread_join, the pthread_t value
+ remains valid and consumes resources - at the very least, resources to store the
+ return value and tying up one possible value of pthread_t.
+ If you're using pthread_detach, normally you call it from either the new thread or
+ the creating thread as soon as the new thread is created (right after pthread_create).
+
+
+ At any point in time, a thread is either joinable or detached (default state is joinable).
+ Joinable threads must be reaped or killed by other threads (using pthread_join) in order to free memory resources.
+ Detached threads cannot be reaped or killed by other threads, and resources are automatically reaped on termination.
+ So unless threads need to synchronize among themselves, it is better to call pthread_detatch
+
+ A detached thread does not require a thread to join on terminating.
+ The resources of the thread are automatically released after terminating if the thread is detached.
+
+https://stackoverflow.com/questions/6042970/pthread-detach-question

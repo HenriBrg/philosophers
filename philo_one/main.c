@@ -6,64 +6,78 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/27 00:26:45 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/28 00:03:56 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	initmutex(int number)
-{
-	int	i;
+/*
+**  Avec #include <inttypes.h>
+** 	printf("Timer : %" PRIu64 "\n", chrono());
+*/
 
-	if ((context.mutexforks = malloc(sizeof(pthread_mutex_t) * number)) == 0)
-		putexit(1, "Error: malloc context.mutexforks\n");
-	i = -1;
-	while (++i < number)
-		pthread_mutex_init()
+
+void	*schedule(void *philo)
+{
+	t_philo *philo;
+
+	philo = (t_philo*)philo;
+
 
 }
 
-void	initphilos(int number)
+void	*handlethread(void *philo)
 {
-	int	i;
+	t_philo 	*philo;
+	pthread_t	subthread;
 
-	i = 0;
-	while (i < number)
+	philo = (t_philo*)philo;
+	philo->last_meal = chrono();
+	philo->remainingtime = philo->last_meal + context.time_to_die;
+	if (pthread_create(&subthread, NULL, schedule, philo))
+		return ((void*)1);
+	pthread_detatch(&subthread);
+	while (1)
 	{
-		context.philos[i].pos = i;
-		context.philos[i].is_eating = 0;
-		context.philos[i].last_meal = 0;
-		context.philos[i].meal_count = 0;
-		context.philos[i].lfork = i;
-		context.philos[i].rfork = (i + 1 != number) ? i + 1 : 0;
-		i++;
+		lockfork();
+		eat();
+
 	}
 }
 
-void	initcontext(int ac, char **av)
+int		start(void)
 {
-	context.philosophers = ft_atoi(av[1]);
-	context.time_to_die = ft_atoi(av[2]);
-	context.time_to_eat = ft_atoi(av[3]);
-	context.time_to_sleep = ft_atoi(av[4]);
-	context.number_of_meal = (ac == 6) ? ft_atoi(av[5]) : 0;
-	if (context.philosophers < 2 || context.philosophers > 100 ||
-		context.time_to_die > 30 || context.time_to_eat > 30 ||
-		context.time_to_sleep > 30 || context.number_of_meal < 0)
-		putexit(1, "Error: invalid arguments\n");
-	context.philos = NULL;
-	if ((context.philos = malloc(sizeof(t_philo) * context.philosophers)) == 0)
-		putexit(1, "Error: malloc context.philos\n");
-	initphilos(context.philosophers);
-	initmutex(context.philosophers);
+	int			i;
+	void		*philo;
+	pthread_t	thread;
 
+	i = -1;
+	context.timer = chrono();
+	while (++i < context.philosophers)
+	{
+		philo = (void*)(&context.philos[i]);
+		if (pthread_create(&thread, NULL, handlethread, philo))
+			return (1);
+		pthread_detatch(thread);
+		// Trouver pourquoi on sleep ici
+		usleep(100);
+	}
+	return (0);
 }
 
 int		main(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
-		putexit(1, "Errror: wrong number of arguments\n");
-	init(ac, av);
+	{
+		putstrfd("Errror: wrong number of arguments\n", 2);
+		return (1);
+	}
+	if (initcontext(ac, av))
+	{
+		// Free context.philos + context
+		putstrfd("Error: initialization\n", 2);
+		return (1);
+	}
 	return (0);
 }

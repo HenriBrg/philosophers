@@ -2,7 +2,7 @@ NAME = philo_one
 
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c utils.c
+SRCS = main.c utils.c init.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -18,6 +18,8 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	gcc $(FLAGS) $(SRCS) -o $(NAME)
 
+run: $(NAME)
+	./philo_one 4 1000 1000 1000
 clean:
 	rm -f $(OBJS)
 
