@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 16:23:05 by henri             #+#    #+#             */
-/*   Updated: 2020/03/28 19:45:48 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 00:43:58 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ int			strcompare(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void		putuint64_t(int fd, uint64_t timer)
+void		putuint64_t(int fd, uint64_t nbr)
 {
 	int		i;
 	char	tmp[15];
 
-	if (timer == 0)
+	if (nbr == 0)
 		tmp[0] = '0';
 	i = 0;
-	while (timer != 0)
+	while (nbr != 0)
 	{
-		tmp[i++] = '0' + (timer % 10);
-		timer /= 10;
+		tmp[i++] = '0' + (nbr % 10);
+		nbr /= 10;
 	}
 	i = (i > 0) ? i - 1 : i;
 	while (i >= 0)

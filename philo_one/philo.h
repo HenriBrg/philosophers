@@ -13,6 +13,8 @@
 ** philosophers = nombre de philosophes et de fourchettes
 ** number_of_meal = nombre de fois qu'un philosophe doit manger (optionnel)
 ** lfork = fourchette gauche
+** Pour toucher aux variables on lock d'abord le mutex philomutex
+** Idem mutex_eat_boolean
 */
 
 typedef struct		s_philo
@@ -24,8 +26,7 @@ typedef struct		s_philo
 	int				rfork;
 	uint64_t		last_meal;
 	uint64_t		remainingtime;
-	pthread_mutex_t	mutex_philo_boolean;
-	pthread_mutex_t	mutex_eat_boolean;
+	pthread_mutex_t	philomutex;
 }					t_philo;
 
 typedef struct		s_context
@@ -47,7 +48,7 @@ t_context		context;
 void			putstrfd(char *str, int fd);
 int				ft_atoi(char *str);
 int				initcontext(int ac, char **av);
-void			putuint64_t(int fd, uint64_t timer);
+void			putuint64_t(int fd, uint64_t nbr);
 uint64_t		chrono(void);
 int				strcompare(char *s1, char *s2);
 void			printstatus(t_philo *philo, char *status);

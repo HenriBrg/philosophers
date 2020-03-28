@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/28 21:35:23 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 00:51:41 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ static int			clear(void)
 	i = -1;
 	if (context.philos)
 		while (++i < context.philosophers)
-		{
-			pthread_mutex_destroy(&context.philos[i].mutex_philo_boolean);
-			pthread_mutex_destroy(&context.philos[i].mutex_eat_boolean);
-		}
+			pthread_mutex_destroy(&context.philos[i].philomutex);
 	free(context.philos);
 	pthread_mutex_destroy(&context.mutexdeath);
 	pthread_mutex_destroy(&context.mutexwrite);
@@ -39,6 +36,8 @@ static int			clear(void)
 ** Un philosophe meurt s'il n'est pas entrain de manger et que son temps de
 ** survie depuis le dernier est depassé
 ** Si c'est le cas, on unlock mutexdeath qui fait que le main se termine
+** On usleep() pour pas toujours avoir le philo->philomutex de locké,
+** car autrement, ca ralentirai largement les actions
 */
 
 static void			*watching(void *philo_uncasted)
@@ -48,15 +47,15 @@ static void			*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
-		pthread_mutex_lock(&philo->mutex_philo_boolean);
+		pthread_mutex_lock(&philo->philomutex);
 		if (philo->is_eating == 0 && philo->remainingtime < chrono())
 		{
 			printstatus(philo, "died");
-			pthread_mutex_unlock(&philo->mutex_philo_boolean);
+			pthread_mutex_unlock(&philo->philomutex);
 			pthread_mutex_unlock(&context.mutexdeath);
 			return ((void*)0);
 		}
-		pthread_mutex_unlock(&philo->mutex_philo_boolean);
+		pthread_mutex_unlock(&philo->philomutex);
 		usleep(1000);
 	}
 
@@ -92,6 +91,12 @@ static void			*noeatlimit(void *philo_uncasted)
 	return ((void*)0);
 }
 
+/*
+** On crée un thread détaché pour chaque philosophe
+** On usleep(100) pour éviter qu'au début ils prennent tous leurs baguettes
+** en même temps et génèrent un deadlock
+*/
+
 static int		start(void)
 {
 	int			i;
@@ -114,6 +119,10 @@ static int		start(void)
 /*
 ** On attend à pthread_mutex_lock(&context.mutexdeath) jusqu'à ce qu'un
 ** philosophe meurt
+** On va wait la ligne pthread_mutex_lock(&context.mutexdeath);
+** jusqu'à ce qu'un philosophe meurt car on a lock le mutex dans initmutex()
+** auparavant
+** Pour rappel, un "lock sur mutex déjà lock" = "wait jusqu'à unlock du mutex"
 */
 
 int		main(int ac, char **av)
@@ -137,7 +146,6 @@ int		main(int ac, char **av)
 	}
 	pthread_mutex_lock(&context.mutexdeath);
 	pthread_mutex_unlock(&context.mutexdeath);
-	free(context.philos);
-	free(context.mutexforks);
+	clear();
 	return (0);
 }

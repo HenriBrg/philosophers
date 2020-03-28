@@ -19,7 +19,7 @@ $(NAME): $(OBJS)
 	gcc $(FLAGS) $(SRCS) -o $(NAME)
 
 run: $(NAME)
-	./philo_one 4 1000 1000 1000
+	./philo_one 5 300 100 100
 clean:
 	rm -f $(OBJS)
 
