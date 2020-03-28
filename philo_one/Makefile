@@ -2,7 +2,7 @@ NAME = philo_one
 
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = main.c utils.c init.c
+SRCS = main.c utils.c init.c actions.c
 
 OBJS = ${SRCS:.c=.o}
 

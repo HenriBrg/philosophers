@@ -4,11 +4,12 @@
 #include <unistd.h>
 
 
+
 void *threadFn(void *arg)
 {
 
  pthread_detach(pthread_self());
- sleep(3);
+ sleep(10);
  printf("Thread Fn\n");
  pthread_exit(NULL);
 }

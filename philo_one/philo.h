@@ -24,6 +24,8 @@ typedef struct		s_philo
 	int				rfork;
 	uint64_t		last_meal;
 	uint64_t		remainingtime;
+	pthread_mutex_t	mutex_philo_boolean;
+	pthread_mutex_t	mutex_eat_boolean;
 }					t_philo;
 
 typedef struct		s_context
@@ -47,5 +49,10 @@ int				ft_atoi(char *str);
 int				initcontext(int ac, char **av);
 void			putuint64_t(int fd, uint64_t timer);
 uint64_t		chrono(void);
+int				strcompare(char *s1, char *s2);
+void			printstatus(t_philo *philo, char *status);
+void			lock2forks(t_philo *philo);
+void			sleep_unlock2forks(t_philo *philo);
+void			eat(t_philo *philo);
 
 #endif

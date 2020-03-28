@@ -6,11 +6,21 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 16:23:05 by henri             #+#    #+#             */
-/*   Updated: 2020/03/27 17:34:03 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/28 19:45:48 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int			strcompare(char *s1, char *s2)
+{
+	int i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}
 
 void		putuint64_t(int fd, uint64_t timer)
 {
@@ -33,7 +43,9 @@ void		putuint64_t(int fd, uint64_t timer)
 /*
 **	man gettimeofday
 **	tv_sec = seconds since Jan. 1, 1970
-**	tv_usec = microseconds left (need to / 1000 for miliseconds)
+**	tv_usec = microseconds left (need to divide by 1000 for miliseconds)
+**  Avec #include <inttypes.h>
+** 	printf("Timer : %" PRIu64 "\n", chrono());
 */
 
 uint64_t	chrono(void)
@@ -48,7 +60,7 @@ uint64_t	chrono(void)
 
 void	putstrfd(char *str, int fd)
 {
-	while (str)
+	while (*str)
 	{
 		write(fd, str, 1);
 		str++;

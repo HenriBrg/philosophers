@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/27 16:43:51 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/28 20:07:46 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ static void		initphilos(int number)
 		context.philos[i].meal_count = 0;
 		context.philos[i].lfork = i;
 		context.philos[i].rfork = (i + 1 != number) ? i + 1 : 0;
+		pthread_mutex_init(&context.philos[i].mutex_philo_boolean, NULL);
+		pthread_mutex_init(&context.philos[i].mutex_eat_boolean, NULL);
+		pthread_mutex_lock(&context.philos[i].mutex_eat_boolean);
 		i++;
 	}
 }
@@ -39,9 +42,9 @@ static int		initmutex(int number)
 	i = -1;
 	while (++i < number)
 		pthread_mutex_init(&(context.mutexforks[i]), NULL);
-	pthread_mutex_init(&(context.mutexdeath), NULL);
-	pthread_mutex_init(&(context.mutexwrite), NULL);
-	// Lock death ?
+	pthread_mutex_init(&context.mutexdeath, NULL);
+	pthread_mutex_lock(&context.mutexdeath);
+	pthread_mutex_init(&context.mutexwrite, NULL);
 	return (0);
 }
 
