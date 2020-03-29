@@ -6,11 +6,30 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 00:50:00 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 18:55:58 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int			clear(void)
+{
+	int 			i;
+
+	i = -1;
+	if (context.mutexforks)
+		while (++i < context.philosophers)
+			pthread_mutex_destroy(&context.mutexforks[i]);
+	free(context.mutexforks);
+	i = -1;
+	if (context.philos)
+		while (++i < context.philosophers)
+			pthread_mutex_destroy(&context.philos[i].philomutex);
+	free(context.philos);
+	pthread_mutex_destroy(&context.mutexdeath);
+	pthread_mutex_destroy(&context.mutexwrite);
+	return (1);
+}
 
 /*
 ** Le table est circulaire donc le dernier philosophe est voisin du premier
@@ -25,12 +44,13 @@ static void		initphilos(int number)
 	while (i < number)
 	{
 		context.philos[i].pos = i;
-		context.philos[i].is_eating = 0;
 		context.philos[i].last_meal = 0;
 		context.philos[i].meal_count = 0;
 		context.philos[i].lfork = i;
 		context.philos[i].rfork = (i + 1 != number) ? i + 1 : 0;
 		pthread_mutex_init(&context.philos[i].philomutex, NULL);
+		pthread_mutex_init(&context.philos[i].philomutexeatcount, NULL);
+		pthread_mutex_lock(&context.philos[i].philomutexeatcount);
 		i++;
 	}
 }
@@ -63,10 +83,10 @@ int				initcontext(int ac, char **av)
 	context.time_to_die = ft_atoi(av[2]);
 	context.time_to_eat = ft_atoi(av[3]);
 	context.time_to_sleep = ft_atoi(av[4]);
-	context.number_of_meal = (ac == 6) ? ft_atoi(av[5]) : 0;
+	context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
 	if (context.philosophers < 2 || context.philosophers > 100 ||
 		context.time_to_die < 50 || context.time_to_eat < 50 ||
-		context.time_to_sleep < 50 || context.number_of_meal < 0)
+		context.time_to_sleep < 50 || context.maxeat < 0)
 		return (1);
 	context.philos = NULL;
 	if ((context.philos = malloc(sizeof(t_philo) * context.philosophers)) == 0)

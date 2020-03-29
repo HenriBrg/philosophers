@@ -6,27 +6,34 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 00:55:43 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 18:55:35 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void			printstatus(t_philo *philo, char *status)
+void			printstatus(t_philo *philo, char *str)
 {
-	static int	dead;
+	static int	x;
 
 	pthread_mutex_lock(&context.mutexwrite);
-	if (dead == 0)
+	if (x == 0)
 	{
 		putuint64_t(1, chrono() - context.timer);
 		write(1, "\t", 1);
+		if (strcompare(str, "maximum meal reached") == 0)
+		{
+			putstrfd("max eat reached\n", 1);
+			x = 1;
+			pthread_mutex_unlock(&context.mutexwrite);
+			return ;
+		}
 		putuint64_t(1, ((uint64_t)philo->pos + 1));
 		write(1, " ", 1);
-		putstrfd(status, 1);
+		putstrfd(str, 1);
 		write(1, "\n", 1);
-		if (strcompare(status, "died") == 0)
-			dead = 1;
+		if (strcompare(str, "died") == 0)
+			x = 1;
 	}
 	pthread_mutex_unlock(&context.mutexwrite);
 }
@@ -55,19 +62,16 @@ void			sleep_unlock2forks(t_philo *philo)
 /*
 ** On lock le mutex appartenant au philosophe concerné
 ** usleep * 1000 pour les milisecondes
-** On utilise le booléen is_eating pour ne pas le faire mourir alors qu'il est
-** en train de manger ...
 */
 
 void			eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->philomutex);
-	philo->is_eating = 1;
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + context.time_to_die;
 	printstatus(philo, "is eating");
-	usleep(context.time_to_eat * 1000);
 	philo->meal_count += 1;
-	philo->is_eating = 0;
+	usleep(context.time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->philomutex);
+	pthread_mutex_unlock(&philo->philomutexeatcount);
 }
