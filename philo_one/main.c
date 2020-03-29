@@ -6,12 +6,11 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 18:53:37 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 19:05:59 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
 
 /*
 ** Attention cette fonction est + complexe qu'elle en a l'air

@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 18:55:58 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/29 19:07:23 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ int			clear(void)
 	i = -1;
 	if (context.philos)
 		while (++i < context.philosophers)
+		{
 			pthread_mutex_destroy(&context.philos[i].philomutex);
+			pthread_mutex_destroy(&context.philos[i].philomutexeatcount);
+
+		}
 	free(context.philos);
 	pthread_mutex_destroy(&context.mutexdeath);
 	pthread_mutex_destroy(&context.mutexwrite);

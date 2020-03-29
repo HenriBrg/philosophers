@@ -1,5 +1,11 @@
-Principalement sur les threads Unix
-https://openclassrooms.com/fr/courses/1513891-la-programmation-systeme-en-c-sous-unix/1514567-les-threads
+
+Principalement sur les threads Unix: https://openclassrooms.com/fr/courses/1513891-la-programmation-systeme-en-c-sous-unix/1514567-les-threads
+Processus et thread : https://openclassrooms.com/fr/courses/1513891-la-programmation-systeme-en-c-sous-unix/1514339-les-processus
+Langage C #17 (les threads) : https://www.youtube.com/watch?v=o_GbRujGCnM
+Bible des thread 1 : https://sites.uclouvain.be/SystInfo/notes/Theorie/html/Threads/threads2.html
+Bible des thread 2 : https://computing.llnl.gov/tutorials/pthreads/
+Sémaphore : https://ocamil.com/index.php/c-c/c-c-les-thread
+
 --------------------------------------------------------------------------------
 
 Le principal avantage des threads par rapport aux processus, c'est la facilité et la
@@ -76,9 +82,6 @@ L’exclusion mutuelle consiste en le respect la propriété de sureté et la pr
  Un programme est en situation de deadlock lorsque tous ses threads d’exécution sont bloqués
  et qu’aucun d’entre eux ne peux être débloqué sans exécuter d’instructions d’un des threads bloqués
  La seule façon de sortir du deadlock est d’arrêter le programme et de le redémarrer
-
-
-
 
 
  pthread_exit is called from the thread itself to terminate its execution (and return a result) early.
