@@ -1,4 +1,9 @@
+https://sites.uclouvain.be/SystInfo/notes/Theorie/html/Threads/coordination.html
+
+https://stackoverflow.com/questions/36755003/initialise-semaphores-using-sem-open
+
 sem_t is a typdef defined in the header file as (apparently) some variety of integer
+sem_t contient aussi une queue qui contient les pointeurs vers les threads qui sont bloqués en attente sur ce sémaphore.
 --------------------------------------------------------------------------------
 What is the difference between lock and semaphore?
 
@@ -6,6 +11,7 @@ The difference between a mutex and a semaphore is that only one thread at a time
 can acquire a mutex, but some preset number of threads can concurrently acquire a semaphore.
 That's why a mutex is sometimes called a binary semaphore.
 A mutex is used for mutual exclusion.
+Un semaphore initialisé à 1 est un sémaphore binaire qui équivaut à un mutex
 --------------------------------------------------------------------------------
 What is the difference between lock and semaphore?
 
@@ -18,6 +24,7 @@ There are semaphore functions to increment or decrement the value of the integer
 Decrementing is a (possibly) blocking function.
 If the resulting semaphore value is negative, the calling thread or process is blocked,
 and cannot continue until some other thread or process increments it.
+A semaphore is an integer whose value is never allowed to fall below zero
 --------------------------------------------------------------------------------
 What is Sem_post?
 
@@ -36,7 +43,7 @@ waiting for the semaphore to be unlocked; the semaphore value is simply incremen
 
 	Si pshared vaut 0, le sémaphore est partagé entre les threads d'un processus
 	Si pshared n'est pas nul, le sémaphore est partagé entre processus
-	
+
 	le code retour varie entre:
 		'0' si tout s'est bien passé
 		'1' si une erreur survient et errno est positionné
@@ -61,3 +68,24 @@ not return from the call to sem_wait() until it either locks the semaphore or th
 	le code retour varie entre:
 		'0' si tout s'est bien passé
 		'-1' si une erreur survient et errno est positionné
+
+
+
+
+
+
+
+
+----- Un tel sémaphore donne exactement le meme résultat qu'un mutex puisqu'il
+est initialisé à 1
+
+
+sem_t semaphore;
+
+sem_init(&semaphore, 0, 1);
+
+sem_wait(&semaphore);
+// section critique
+sem_post(&semaphore);
+
+sem_destroy(&semaphore);

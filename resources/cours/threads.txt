@@ -11,6 +11,8 @@ Sémaphore : https://ocamil.com/index.php/c-c/c-c-les-thread
 Le principal avantage des threads par rapport aux processus, c'est la facilité et la
 rapidité de leur création.
 
+Un mutex doit être débloqué par le thread qui l'a bloqué.
+
 En effet, tous les threads d'un même processus partagent le même espace d'adressage,
 et donc toutes les variables.
 

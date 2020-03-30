@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/30 11:07:31 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/30 13:54:32 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static int		start(void)
 		if (pthread_create(&thread, NULL, &noeatlimit, philo))
 			return (1);
 		pthread_detach(thread);
-		usleep(10);
+		usleep(100);
 	}
 	return (0);
 }
