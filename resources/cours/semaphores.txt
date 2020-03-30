@@ -1,0 +1,63 @@
+sem_t is a typdef defined in the header file as (apparently) some variety of integer
+--------------------------------------------------------------------------------
+What is the difference between lock and semaphore?
+
+The difference between a mutex and a semaphore is that only one thread at a time
+can acquire a mutex, but some preset number of threads can concurrently acquire a semaphore.
+That's why a mutex is sometimes called a binary semaphore.
+A mutex is used for mutual exclusion.
+--------------------------------------------------------------------------------
+What is the difference between lock and semaphore?
+
+A lock allows only one thread to enter the part that's locked and the lock is not
+shared with any other processes. ... A semaphore does the same as a mutex but allows x number of threads to enter
+--------------------------------------------------------------------------------
+Can Semaphore be negative?
+
+There are semaphore functions to increment or decrement the value of the integer by one.
+Decrementing is a (possibly) blocking function.
+If the resulting semaphore value is negative, the calling thread or process is blocked,
+and cannot continue until some other thread or process increments it.
+--------------------------------------------------------------------------------
+What is Sem_post?
+
+The sem_post() function unlocks the specified semaphore by performing a semaphore unlock
+operation on that semaphore.
+When this operation results in a positive semaphore value, no threads were blocked
+waiting for the semaphore to be unlocked; the semaphore value is simply incremented.
+--------------------------------------------------------------------------------
+
+1) int sem_init(sem_t *semaphore, int pshared, unsigned int valeur);
+
+	argument 1 : semaphore → pointeur vers le sémaphore à initialiser
+	argument 2 : pshared → drapeau qui précise si le sémaphore est utilisé par des threads (valeur 0)
+		L'argument pshared indique si ce sémaphore sera partagé entre les threads d'un processus ou entre processus.
+	argument 3 : valeur → valeur de départ du sémaphore.
+
+	Si pshared vaut 0, le sémaphore est partagé entre les threads d'un processus
+	Si pshared n'est pas nul, le sémaphore est partagé entre processus
+	
+	le code retour varie entre:
+		'0' si tout s'est bien passé
+		'1' si une erreur survient et errno est positionné
+
+2) int sem_wait(sem_t *semaphore);
+
+	argument 1 : semaphore → pointeur vers le sémaphore à bloquer
+
+	le code retour varie entre:
+		'0' si tout s'est bien passé
+		'-1' si une erreur survient et errno est positionné
+
+Cette fonction est bloquante !
+The sem_wait() function locks the semaphore referenced by sem by performing a semaphore lock
+operation on that semaphore. If the semaphore value is currently zero, then the calling thread will
+not return from the call to sem_wait() until it either locks the semaphore or the call is interrupted by a signal.
+
+3) int sem_post(sem_t *semaphore);
+
+	argument 1 : semaphore → pointeur vers le sémaphore à débloquer ;
+
+	le code retour varie entre:
+		'0' si tout s'est bien passé
+		'-1' si une erreur survient et errno est positionné

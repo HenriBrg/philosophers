@@ -55,6 +55,6 @@ void				printstatus(t_philo *philo, char *str);
 void				lock2forks(t_philo *philo);
 void				sleep_unlock2forks(t_philo *philo);
 void				eat(t_philo *philo);
-int					clear(void);
+void 				clear(void);
 
 #endif

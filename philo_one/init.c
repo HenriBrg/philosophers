@@ -6,13 +6,13 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 19:07:23 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/30 11:19:50 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int			clear(void)
+void 			clear(void)
 {
 	int 			i;
 
@@ -27,12 +27,10 @@ int			clear(void)
 		{
 			pthread_mutex_destroy(&context.philos[i].philomutex);
 			pthread_mutex_destroy(&context.philos[i].philomutexeatcount);
-
 		}
 	free(context.philos);
 	pthread_mutex_destroy(&context.mutexdeath);
 	pthread_mutex_destroy(&context.mutexwrite);
-	return (1);
 }
 
 /*
@@ -97,5 +95,4 @@ int				initcontext(int ac, char **av)
 		return (1);
 	initphilos(context.philosophers);
 	return (initmutex(context.philosophers));
-
 }
