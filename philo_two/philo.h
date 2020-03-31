@@ -50,10 +50,11 @@ int					initcontext(int ac, char **av);
 void				putuint64_t(int fd, uint64_t nbr);
 uint64_t			chrono(void);
 int					strcompare(char *s1, char *s2);
-void				printstatus(t_philo *philo, char *str);
-void				lock2forks(t_philo *philo);
-void				sleep_unlock2forks(t_philo *philo);
-void				eat(t_philo *philo);
+int					printstatus(t_philo *philo, char *str);
+int					lock2forks(t_philo *philo);
+int					sleep_unlock2forks(t_philo *philo);
+int					eat(t_philo *philo);
 void 				clear(void);
+char				*semanames(char *name, int id, int eat);
 
 #endif

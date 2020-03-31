@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/30 13:54:32 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 00:37:28 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 ** par respect pour le prototype
 */
 
+
+// idée sema : test si la somme de repas de chaque philo = philo*max meal, si oui on termine
 void			*watchingmaxeat(void *arg)
 {
 	int	i;
@@ -38,11 +40,11 @@ void			*watchingmaxeat(void *arg)
 	while (++max < context.maxeat)
 	{
 		i = -1;
-		while (++i < context.philosophers)
-			pthread_mutex_lock(&context.philos[i].philomutexeatcount);
+		// while (++i < context.philosophers)
+		// 	pthread_mutex_lock(&context.philos[i].philomutexeatcount);
 	}
 	printstatus(NULL, "maximum meal reached");
-	pthread_mutex_unlock(&context.mutexdeath);
+	// pthread_mutex_unlock(&context.mutexdeath);
 	return ((void*)0);
 }
 
@@ -66,16 +68,21 @@ static void			*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
-		pthread_mutex_lock(&philo->philomutex);
+		if (sem_wait(philo->philosema))
+			return ((void*)1);
 		if (philo->remainingtime < chrono())
 		{
 			printstatus(philo, "died");
-			pthread_mutex_unlock(&philo->philomutex);
-			pthread_mutex_unlock(&context.mutexdeath);
+			if (sem_post(philo->philosema))
+				return ((void*)1);
+			if (sem_post(context.mutexdeath))
+				return ((void*)1);
 			return ((void*)0);
 		}
-		pthread_mutex_unlock(&philo->philomutex);
+		if (sem_post(philo->philosema))
+			return ((void*)1);
 	}
+	return ((void*)0);
 }
 
 /*
@@ -100,10 +107,14 @@ static void			*noeatlimit(void *philo_uncasted)
 	pthread_detach(subthread);
 	while (42)
 	{
-		lock2forks(philo);
-		eat(philo);
-		sleep_unlock2forks(philo);
-		printstatus(philo, "is thinking");
+		if (lock2forks(philo))
+			return ((void*)1);
+		if (eat(philo))
+			return ((void*)1);
+		if (sleep_unlock2forks(philo))
+			return ((void*)1);
+		if (printstatus(philo, "is thinking"))
+			return ((void*)1);
  	}
 	return ((void*)0);
 }
@@ -161,14 +172,13 @@ int		main(int ac, char **av)
 		putstrfd("Error: initialization\n", 2);
 		return (1);
 	}
-	if (start())
+	if (0 && start())
 	{
 		clear();
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	pthread_mutex_lock(&context.mutexdeath);
-	pthread_mutex_unlock(&context.mutexdeath);
+	sem_post(context.semadeath);
 	clear();
 	return (0);
 }

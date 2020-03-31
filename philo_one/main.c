@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/31 16:45:51 by henri            ###   ########.fr       */
+/*   Updated: 2020/03/31 20:30:15 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,8 @@ int		main(int ac, char **av)
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	sem_wait(context.mutexdeath);
+	pthread_mutex_lock(&context.mutexdeath);
+	pthread_mutex_unlock(&context.mutexdeath);
 	clear();
 	return (0);
 }
