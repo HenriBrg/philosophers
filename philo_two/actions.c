@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 00:36:45 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 12:10:27 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int			printstatus(t_philo *philo, char *str)
 	}
 	if (sem_post(context.semawrite))
 		return (1);
-	return (0);
+	return (x == 1 ? 1 : 0);
 }
 
 /*
@@ -80,7 +80,7 @@ int			sleep_unlock2forks(t_philo *philo)
 int				eat(t_philo *philo)
 {
 	if (sem_wait(philo->philosema))
-		return ((void*)1);
+		return (1);
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + context.time_to_die;
 	if (printstatus(philo, "is eating"))
@@ -88,8 +88,8 @@ int				eat(t_philo *philo)
 	philo->meal_count += 1;
 	usleep(context.time_to_eat * 1000);
 	if (sem_post(philo->philosema))
-		return ((void*)1);
+		return (1);
 	if (sem_post(philo->philosemaeatcount))
-		return ((void*)1);
+		return (1);
 	return (0);
 }

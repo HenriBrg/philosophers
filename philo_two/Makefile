@@ -1,4 +1,4 @@
-NAME = philo_one
+NAME = philo_two
 
 FLAGS = -Wall -Wextra -Werror
 
@@ -21,13 +21,13 @@ $(NAME): $(OBJS)
 	gcc $(FLAGS) $(SRCS) -o $(NAME)
 
 run1: $(NAME)
-	./philo_one 4 410 200 200
+	./philo_two 4 410 200 200
 
 run2: $(NAME)
-	./philo_one 4 310 200 100
+	./philo_two 4 310 200 100
 
 run3: $(NAME)
-	./philo_one 4 410 200 200 2
+	./philo_two 4 410 200 200 2
 
 clean:
 	rm -f $(OBJS)

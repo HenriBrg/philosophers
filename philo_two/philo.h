@@ -55,6 +55,6 @@ int					lock2forks(t_philo *philo);
 int					sleep_unlock2forks(t_philo *philo);
 int					eat(t_philo *philo);
 void 				clear(void);
-char				*semanames(char *name, int id, int eat);
+void 				semanames(char *name, int id, int eat);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 00:37:28 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 12:38:13 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 ** par respect pour le prototype
 */
 
-
-// idée sema : test si la somme de repas de chaque philo = philo*max meal, si oui on termine
 void			*watchingmaxeat(void *arg)
 {
 	int	i;
@@ -40,11 +38,14 @@ void			*watchingmaxeat(void *arg)
 	while (++max < context.maxeat)
 	{
 		i = -1;
-		// while (++i < context.philosophers)
-		// 	pthread_mutex_lock(&context.philos[i].philomutexeatcount);
+		while (++i < context.philosophers)
+			if (sem_wait(context.philos[i].philosemaeatcount))
+				return ((void*)1);
 	}
-	printstatus(NULL, "maximum meal reached");
-	// pthread_mutex_unlock(&context.mutexdeath);
+	if (printstatus(NULL, "maximum meal reached"))
+		return ((void*)1);
+	if (sem_post(context.semadeath))
+		return ((void*)1);
 	return ((void*)0);
 }
 
@@ -55,7 +56,8 @@ void			*watchingmaxeat(void *arg)
 ** Si c'est le cas, on unlock mutexdeath qui fait que le main se termine
 ** car autrement, ca ralentirai largement les actions
 **
-** On usleep(1000) pour pas toujours avoir le philo->philomutex de locké
+** On usleep(1000) (indispensable) pour pas toujours avoir le
+** philo->philomutex de locké
 ** Pas besoin de savoir si le philo est en train de manger car de toute facon
 ** le mutex global est lock donc s'il mange, le thread watching pourra pas
 ** check si le philo meurt
@@ -75,12 +77,13 @@ static void			*watching(void *philo_uncasted)
 			printstatus(philo, "died");
 			if (sem_post(philo->philosema))
 				return ((void*)1);
-			if (sem_post(context.mutexdeath))
+			if (sem_post(context.semadeath))
 				return ((void*)1);
 			return ((void*)0);
 		}
 		if (sem_post(philo->philosema))
 			return ((void*)1);
+		usleep(1000);
 	}
 	return ((void*)0);
 }
@@ -172,13 +175,13 @@ int		main(int ac, char **av)
 		putstrfd("Error: initialization\n", 2);
 		return (1);
 	}
-	if (0 && start())
+	if (start())
 	{
 		clear();
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	sem_post(context.semadeath);
+	sem_wait(context.semadeath);
 	clear();
 	return (0);
 }

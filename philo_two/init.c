@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/31 22:53:24 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 12:43:57 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 ** ou alors 1 si philo-eat-id
 */
 
-char			*semanames(char *name, int id, int eat)
+void			semanames(char *name, int id, int eat)
 {
 	int i;
-	const char basename1[6] = "philo-";
-	const char basename2[10] = "philo-eat-";
+	const char	basename1[6] = "philo-";
+	const char	basename2[10] = "philo-eat-";
 
 	i = -1;
 	if (eat)
@@ -38,13 +38,12 @@ char			*semanames(char *name, int id, int eat)
 		id /= 10;
 	}
 	name[i] = '\0';
-	return (name);
 }
 
-void 			clear(void)
+void			clear(void)
 {
-	int 			i;
-	char			name[50];
+	int 		i;
+	char		name[50];
 
 	i = -1;
 	sem_unlink(SEMAFORKS);
@@ -65,8 +64,8 @@ void 			clear(void)
 
 static int		initphilos(void)
 {
-	int	i;
-	char			name[50];
+	int			i;
+	char		name[50];
 
 	i = 0;
 	while (i < context.philosophers)
@@ -75,15 +74,11 @@ static int		initphilos(void)
 		context.philos[i].last_meal = 0;
 		context.philos[i].meal_count = 0;
 		semanames(name, i + 1, PHI_INIT);
-
-
 		sem_unlink(name);
 		if ((context.philos[i].philosema =
 			sem_open(name, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
 			return (1);
 		semanames(name, i + 1, EAT_INIT);
-
-
 		sem_unlink(name);
 		if ((context.philos[i].philosemaeatcount =
 			sem_open(name, O_CREAT | O_EXCL, 0644, 0)) == SEM_FAILED)

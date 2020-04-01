@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/03/31 20:30:15 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 12:18:27 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,13 @@ void			*watchingmaxeat(void *arg)
 ** Si c'est le cas, on unlock mutexdeath qui fait que le main se termine
 ** car autrement, ca ralentirai largement les actions
 **
-** On usleep(1000) pour pas toujours avoir le philo->philomutex de locké
+** On usleep(1000) est INDISPENSABLE
+** pour pas toujours avoir le philo->philomutex de locké
 ** Pas besoin de savoir si le philo est en train de manger car de toute facon
 ** le mutex global est lock donc s'il mange, le thread watching pourra pas
 ** check si le philo meurt
+** On peut envisager le mettre à usleep(100) car faut afficher les infos en
+** temps réel donc ... à voir, après µ 1000 = 1 miliseconde
 */
 
 static void			*watching(void *philo_uncasted)
@@ -75,6 +78,7 @@ static void			*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
+		usleep(1000);
 	}
 }
 
