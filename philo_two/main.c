@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 12:38:13 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 18:11:53 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int		main(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 	{
-		putstrfd("Errror: wrong number of arguments\n", 2);
+		putstrfd("Error: wrong number of arguments\n", 2);
 		return (1);
 	}
 	if (initcontext(ac, av))

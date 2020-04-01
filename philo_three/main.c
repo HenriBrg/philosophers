@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 18:11:58 by henri            ###   ########.fr       */
+/*   Updated: 2020/04/01 18:40:58 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,13 @@ void			*watchingmaxeat(void *arg)
 	{
 		i = -1;
 		while (++i < context.philosophers)
-			pthread_mutex_lock(&context.philos[i].philomutexeatcount);
+			if (sem_wait(context.philos[i].philosemaeatcount))
+				return ((void*)1);
 	}
-	printstatus(NULL, "maximum meal reached");
-	pthread_mutex_unlock(&context.mutexdeath);
+	if (printstatus(NULL, "maximum meal reached"))
+		return ((void*)1);
+	if (sem_post(context.semadeath))
+		return ((void*)1);
 	return ((void*)0);
 }
 
@@ -53,13 +56,11 @@ void			*watchingmaxeat(void *arg)
 ** Si c'est le cas, on unlock mutexdeath qui fait que le main se termine
 ** car autrement, ca ralentirai largement les actions
 **
-** On usleep(1000) est INDISPENSABLE
-** pour pas toujours avoir le philo->philomutex de locké
+** On usleep(1000) (indispensable) pour pas toujours avoir le
+** philo->philomutex de locké
 ** Pas besoin de savoir si le philo est en train de manger car de toute facon
 ** le mutex global est lock donc s'il mange, le thread watching pourra pas
 ** check si le philo meurt
-** On peut envisager le mettre à usleep(100) car faut afficher les infos en
-** temps réel donc ... à voir, après µ 1000 = 1 miliseconde
 */
 
 static void			*watching(void *philo_uncasted)
@@ -69,17 +70,22 @@ static void			*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
-		pthread_mutex_lock(&philo->philomutex);
+		if (sem_wait(philo->philosema))
+			return ((void*)1);
 		if (philo->remainingtime < chrono())
 		{
 			printstatus(philo, "died");
-			pthread_mutex_unlock(&philo->philomutex);
-			pthread_mutex_unlock(&context.mutexdeath);
+			if (sem_post(philo->philosema))
+				return ((void*)1);
+			if (sem_post(context.semadeath))
+				return ((void*)1);
 			return ((void*)0);
 		}
-		pthread_mutex_unlock(&philo->philomutex);
+		if (sem_post(philo->philosema))
+			return ((void*)1);
 		usleep(1000);
 	}
+	return ((void*)0);
 }
 
 /*
@@ -91,65 +97,61 @@ static void			*watching(void *philo_uncasted)
 ** 	- Si oui le philo mange, libère les 2 fourchettes, dors puis pense
 */
 
-static void			*noeatlimit(void *philo_uncasted)
+static int		noeatlimit(void *philo_uncasted)
 {
-	t_philo 	*philo;
-	pthread_t	subthread;
+	t_philo 		*philo;
+	pthread_t		subthread;
 
 	philo = (t_philo*)philo_uncasted;
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + context.time_to_die;
 	if (pthread_create(&subthread, NULL, &watching, philo))
-		return ((void*)1);
+		return (1);
 	pthread_detach(subthread);
 	while (42)
 	{
-		lock2forks(philo);
-		eat(philo);
-		sleep_unlock2forks(philo);
-		printstatus(philo, "is thinking");
+		if (lock2forks(philo))
+			return (1);
+		if (eat(philo))
+			return (1);
+		if (sleep_unlock2forks(philo))
+			return (1);
+		if (printstatus(philo, "is thinking"))
+			return (1);
  	}
-	return ((void*)0);
+	return (0);
 }
-
-/*
-** On crée un thread détaché pour chaque philosophe
-** On usleep(100) pour éviter qu'au début ils prennent tous leurs baguettes
-** en même temps et génèrent un deadlock
-*/
 
 static int		start(void)
 {
 	int			i;
-	void		*philo;
-	pthread_t	thread;
 
 	i = -1;
 	context.timer = chrono();
-	if (context.maxeat)
-	{
-		if (pthread_create(&thread, NULL, &watchingmaxeat, NULL))
-			return (1);
-		pthread_detach(thread);
-	}
 	while (++i < context.philosophers)
 	{
-		philo = (void*)(&context.philos[i]);
-		if (pthread_create(&thread, NULL, &noeatlimit, philo))
+		context.philos[i].philopid = fork();
+		if (context.philos[i].philopid < 0)
 			return (1);
-		pthread_detach(thread);
+		else if (context.philos[i].philopid == 0)
+		{
+			noeatlimit(&context.philos[i]);
+			exit(0);
+		}
 		usleep(100);
 	}
 	return (0);
 }
 
 /*
-** On attend à pthread_mutex_lock(&context.mutexdeath) jusqu'à ce qu'un
-** philosophe meurt
-** On va wait la ligne pthread_mutex_lock(&context.mutexdeath);
-** jusqu'à ce qu'un philosophe meurt car on a lock le mutex dans initmutex()
-** auparavant
-** Pour rappel, un "lock sur mutex déjà lock" = "wait jusqu'à unlock du mutex"
+** Explication globale philo_three
+** On execute threadmaxeat() qui lance un thread en loop infinie pour gerer
+** le eat maximum qui est définit par les semaphores
+** (donc accessible depuis tous les thread et processus)
+** suivant : philos[i].philosemaeatcount
+**
+** Ensuite on start() qui fork() pour chaque philo du quel on call noeatlimit()
+** dans laquelle on essaie en loop infinie de manger etc ...
 */
 
 int		main(int ac, char **av)
@@ -165,14 +167,13 @@ int		main(int ac, char **av)
 		putstrfd("Error: initialization\n", 2);
 		return (1);
 	}
-	if (start())
+	if (threadmaxeat() || start())
 	{
 		clear();
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	pthread_mutex_lock(&context.mutexdeath);
-	pthread_mutex_unlock(&context.mutexdeath);
+	sem_wait(context.semadeath);
 	clear();
 	return (0);
 }
