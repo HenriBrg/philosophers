@@ -78,7 +78,12 @@ static void			*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
+		struct timeval timeBef;
+		struct timeval timeAft;
+		gettimeofday(&timeBef, 0);
 		usleep(1000);
+		gettimeofday(&timeAft, 0);
+		printf("TIME GAP = %ld\n", (timeAft.tv_usec - timeBef.tv_usec));
 	}
 }
 
@@ -117,6 +122,8 @@ static void			*noeatlimit(void *philo_uncasted)
 ** On usleep(100) pour éviter qu'au début ils prennent tous leurs baguettes
 ** en même temps et génèrent un deadlock
 */
+
+# include <sys/time.h>
 
 static int		start(void)
 {

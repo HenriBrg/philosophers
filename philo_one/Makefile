@@ -15,10 +15,10 @@ DEBUG = -g -fsanitize=address
 all: $(NAME)
 
 .c.o:
-	gcc $(FLAGS) -c $< -o $@
+	gcc $(FLAGS) -c $< -o $@ -lpthread
 
 $(NAME): $(OBJS)
-	gcc $(FLAGS) $(SRCS) -o $(NAME)
+	gcc $(FLAGS) $(SRCS) -o $(NAME) -lpthread
 
 run1: $(NAME)
 	./philo_one 4 410 200 200
