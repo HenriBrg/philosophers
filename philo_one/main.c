@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 18:11:58 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/08 22:47:48 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ static void			*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
-		struct timeval timeBef;
-		struct timeval timeAft;
-		gettimeofday(&timeBef, 0);
+		// struct timeval timeBef;
+		// struct timeval timeAft;
+		// gettimeofday(&timeBef, 0);
 		usleep(1000);
-		gettimeofday(&timeAft, 0);
-		printf("TIME GAP = %ld\n", (timeAft.tv_usec - timeBef.tv_usec));
+		// gettimeofday(&timeAft, 0);
+		// printf("TIME GAP = %d\n", (timeAft.tv_usec - timeBef.tv_usec));
 	}
 }
 
