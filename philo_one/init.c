@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/03/30 11:19:50 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/10 17:31:33 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int				initcontext(int ac, char **av)
 	context.time_to_eat = ft_atoi(av[3]);
 	context.time_to_sleep = ft_atoi(av[4]);
 	context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
-	if (context.philosophers < 2 || context.philosophers > 100 ||
+	if (context.philosophers < 2 || context.philosophers > 200 ||
 		context.time_to_die < 50 || context.time_to_eat < 50 ||
 		context.time_to_sleep < 50 || context.maxeat < 0)
 		return (1);
