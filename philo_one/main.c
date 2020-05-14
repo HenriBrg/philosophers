@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/08 22:47:48 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:36:34 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void			*watchingmaxeat(void *arg)
 
 	max = -1;
 	(void)arg;
-	while (++max < context.maxeat)
+	while (++max < g_context.maxeat)
 	{
 		i = -1;
-		while (++i < context.philosophers)
-			pthread_mutex_lock(&context.philos[i].philomutexeatcount);
+		while (++i < g_context.philosophers)
+			pthread_mutex_lock(&g_context.philos[i].philomutexeatcount);
 	}
 	printstatus(NULL, "maximum meal reached");
-	pthread_mutex_unlock(&context.mutexdeath);
+	pthread_mutex_unlock(&g_context.mutexdeath);
 	return ((void*)0);
 }
 
@@ -60,11 +60,20 @@ void			*watchingmaxeat(void *arg)
 ** check si le philo meurt
 ** On peut envisager le mettre à usleep(100) car faut afficher les infos en
 ** temps réel donc ... à voir, après µ 1000 = 1 miliseconde
+**
+**
+** TEST usleep precision
+** # include <sys/time.h>
+** struct timeval timeBef;
+** struct timeval timeAft;
+** gettimeofday(&timeBef, 0);
+** gettimeofday(&timeAft, 0);
+** printf("TIME GAP = %d\n", (timeAft.tv_usec - timeBef.tv_usec));
 */
 
-static void			*watching(void *philo_uncasted)
+static void		*watching(void *philo_uncasted)
 {
-	t_philo 		*philo;
+	t_philo		*philo;
 
 	philo = (t_philo*)philo_uncasted;
 	while (42)
@@ -74,16 +83,11 @@ static void			*watching(void *philo_uncasted)
 		{
 			printstatus(philo, "died");
 			pthread_mutex_unlock(&philo->philomutex);
-			pthread_mutex_unlock(&context.mutexdeath);
+			pthread_mutex_unlock(&g_context.mutexdeath);
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
-		// struct timeval timeBef;
-		// struct timeval timeAft;
-		// gettimeofday(&timeBef, 0);
 		usleep(1000);
-		// gettimeofday(&timeAft, 0);
-		// printf("TIME GAP = %d\n", (timeAft.tv_usec - timeBef.tv_usec));
 	}
 }
 
@@ -96,14 +100,14 @@ static void			*watching(void *philo_uncasted)
 ** 	- Si oui le philo mange, libère les 2 fourchettes, dors puis pense
 */
 
-static void			*noeatlimit(void *philo_uncasted)
+static void		*noeatlimit(void *philo_uncasted)
 {
-	t_philo 	*philo;
+	t_philo		*philo;
 	pthread_t	subthread;
 
 	philo = (t_philo*)philo_uncasted;
 	philo->last_meal = chrono();
-	philo->remainingtime = philo->last_meal + context.time_to_die;
+	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	if (pthread_create(&subthread, NULL, &watching, philo))
 		return ((void*)1);
 	pthread_detach(subthread);
@@ -113,7 +117,7 @@ static void			*noeatlimit(void *philo_uncasted)
 		eat(philo);
 		sleep_unlock2forks(philo);
 		printstatus(philo, "is thinking");
- 	}
+	}
 	return ((void*)0);
 }
 
@@ -123,8 +127,6 @@ static void			*noeatlimit(void *philo_uncasted)
 ** en même temps et génèrent un deadlock
 */
 
-# include <sys/time.h>
-
 static int		start(void)
 {
 	int			i;
@@ -132,16 +134,16 @@ static int		start(void)
 	pthread_t	thread;
 
 	i = -1;
-	context.timer = chrono();
-	if (context.maxeat)
+	g_context.timer = chrono();
+	if (g_context.maxeat)
 	{
 		if (pthread_create(&thread, NULL, &watchingmaxeat, NULL))
 			return (1);
 		pthread_detach(thread);
 	}
-	while (++i < context.philosophers)
+	while (++i < g_context.philosophers)
 	{
-		philo = (void*)(&context.philos[i]);
+		philo = (void*)(&g_context.philos[i]);
 		if (pthread_create(&thread, NULL, &noeatlimit, philo))
 			return (1);
 		pthread_detach(thread);
@@ -159,7 +161,7 @@ static int		start(void)
 ** Pour rappel, un "lock sur mutex déjà lock" = "wait jusqu'à unlock du mutex"
 */
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 	{
@@ -178,8 +180,8 @@ int		main(int ac, char **av)
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	pthread_mutex_lock(&context.mutexdeath);
-	pthread_mutex_unlock(&context.mutexdeath);
+	pthread_mutex_lock(&g_context.mutexdeath);
+	pthread_mutex_unlock(&g_context.mutexdeath);
 	clear();
 	return (0);
 }

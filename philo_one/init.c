@@ -6,31 +6,31 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/10 17:31:33 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:37:21 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void 			clear(void)
+void			clear(void)
 {
-	int 			i;
+	int			i;
 
 	i = -1;
-	if (context.mutexforks)
-		while (++i < context.philosophers)
-			pthread_mutex_destroy(&context.mutexforks[i]);
-	free(context.mutexforks);
+	if (g_context.mutexforks)
+		while (++i < g_context.philosophers)
+			pthread_mutex_destroy(&g_context.mutexforks[i]);
+	free(g_context.mutexforks);
 	i = -1;
-	if (context.philos)
-		while (++i < context.philosophers)
+	if (g_context.philos)
+		while (++i < g_context.philosophers)
 		{
-			pthread_mutex_destroy(&context.philos[i].philomutex);
-			pthread_mutex_destroy(&context.philos[i].philomutexeatcount);
+			pthread_mutex_destroy(&g_context.philos[i].philomutex);
+			pthread_mutex_destroy(&g_context.philos[i].philomutexeatcount);
 		}
-	free(context.philos);
-	pthread_mutex_destroy(&context.mutexdeath);
-	pthread_mutex_destroy(&context.mutexwrite);
+	free(g_context.philos);
+	pthread_mutex_destroy(&g_context.mutexdeath);
+	pthread_mutex_destroy(&g_context.mutexwrite);
 }
 
 /*
@@ -40,19 +40,19 @@ void 			clear(void)
 
 static void		initphilos(int number)
 {
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < number)
 	{
-		context.philos[i].pos = i;
-		context.philos[i].last_meal = 0;
-		context.philos[i].meal_count = 0;
-		context.philos[i].lfork = i;
-		context.philos[i].rfork = (i + 1 != number) ? i + 1 : 0;
-		pthread_mutex_init(&context.philos[i].philomutex, NULL);
-		pthread_mutex_init(&context.philos[i].philomutexeatcount, NULL);
-		pthread_mutex_lock(&context.philos[i].philomutexeatcount);
+		g_context.philos[i].pos = i;
+		g_context.philos[i].last_meal = 0;
+		g_context.philos[i].meal_count = 0;
+		g_context.philos[i].lfork = i;
+		g_context.philos[i].rfork = (i + 1 != number) ? i + 1 : 0;
+		pthread_mutex_init(&g_context.philos[i].philomutex, NULL);
+		pthread_mutex_init(&g_context.philos[i].philomutexeatcount, NULL);
+		pthread_mutex_lock(&g_context.philos[i].philomutexeatcount);
 		i++;
 	}
 }
@@ -65,34 +65,34 @@ static void		initphilos(int number)
 
 static int		initmutex(int number)
 {
-	int	i;
+	int			i;
 
-	context.mutexforks = NULL;
-	if ((context.mutexforks = malloc(sizeof(pthread_mutex_t) * number)) == 0)
+	g_context.mutexforks = NULL;
+	if ((g_context.mutexforks = malloc(sizeof(pthread_mutex_t) * number)) == 0)
 		return (1);
 	i = -1;
 	while (++i < number)
-		pthread_mutex_init(&context.mutexforks[i], NULL);
-	pthread_mutex_init(&context.mutexdeath, NULL);
-	pthread_mutex_lock(&context.mutexdeath);
-	pthread_mutex_init(&context.mutexwrite, NULL);
+		pthread_mutex_init(&g_context.mutexforks[i], NULL);
+	pthread_mutex_init(&g_context.mutexdeath, NULL);
+	pthread_mutex_lock(&g_context.mutexdeath);
+	pthread_mutex_init(&g_context.mutexwrite, NULL);
 	return (0);
 }
 
 int				initcontext(int ac, char **av)
 {
-	context.philosophers = ft_atoi(av[1]);
-	context.time_to_die = ft_atoi(av[2]);
-	context.time_to_eat = ft_atoi(av[3]);
-	context.time_to_sleep = ft_atoi(av[4]);
-	context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
-	if (context.philosophers < 2 || context.philosophers > 200 ||
-		context.time_to_die < 50 || context.time_to_eat < 50 ||
-		context.time_to_sleep < 50 || context.maxeat < 0)
+	g_context.philosophers = ft_atoi(av[1]);
+	g_context.time_to_die = ft_atoi(av[2]);
+	g_context.time_to_eat = ft_atoi(av[3]);
+	g_context.time_to_sleep = ft_atoi(av[4]);
+	g_context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
+	if (g_context.philosophers < 2 || g_context.philosophers > 200 ||
+		g_context.time_to_die < 50 || g_context.time_to_eat < 50 ||
+		g_context.time_to_sleep < 50 || g_context.maxeat < 0)
 		return (1);
-	context.philos = NULL;
-	if ((context.philos = malloc(sizeof(t_philo) * context.philosophers)) == 0)
+	g_context.philos = NULL;
+	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))
 		return (1);
-	initphilos(context.philosophers);
-	return (initmutex(context.philosophers));
+	initphilos(g_context.philosophers);
+	return (initmutex(g_context.philosophers));
 }

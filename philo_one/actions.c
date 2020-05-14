@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 18:55:35 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:36:05 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@ void			printstatus(t_philo *philo, char *str)
 {
 	static int	x;
 
-	pthread_mutex_lock(&context.mutexwrite);
+	pthread_mutex_lock(&g_context.mutexwrite);
 	if (x == 0)
 	{
-		putuint64_t(1, chrono() - context.timer);
+		putuint64_t(1, chrono() - g_context.timer);
 		write(1, "\t", 1);
 		if (strcompare(str, "maximum meal reached") == 0)
 		{
 			putstrfd("max eat reached\n", 1);
 			x = 1;
-			pthread_mutex_unlock(&context.mutexwrite);
+			pthread_mutex_unlock(&g_context.mutexwrite);
 			return ;
 		}
 		putuint64_t(1, ((uint64_t)philo->pos + 1));
@@ -35,7 +35,7 @@ void			printstatus(t_philo *philo, char *str)
 		if (strcompare(str, "died") == 0)
 			x = 1;
 	}
-	pthread_mutex_unlock(&context.mutexwrite);
+	pthread_mutex_unlock(&g_context.mutexwrite);
 }
 
 /*
@@ -45,18 +45,18 @@ void			printstatus(t_philo *philo, char *str)
 
 void			lock2forks(t_philo *philo)
 {
-	pthread_mutex_lock(&context.mutexforks[philo->lfork]);
+	pthread_mutex_lock(&g_context.mutexforks[philo->lfork]);
 	printstatus(philo, "has taken a fork");
-	pthread_mutex_lock(&context.mutexforks[philo->rfork]);
+	pthread_mutex_lock(&g_context.mutexforks[philo->rfork]);
 	printstatus(philo, "has taken a fork");
 }
 
 void			sleep_unlock2forks(t_philo *philo)
 {
 	printstatus(philo, "is sleeping");
-	pthread_mutex_unlock(&context.mutexforks[philo->lfork]);
-	pthread_mutex_unlock(&context.mutexforks[philo->rfork]);
-	usleep(context.time_to_sleep * 1000);
+	pthread_mutex_unlock(&g_context.mutexforks[philo->lfork]);
+	pthread_mutex_unlock(&g_context.mutexforks[philo->rfork]);
+	usleep(g_context.time_to_sleep * 1000);
 }
 
 /*
@@ -68,10 +68,10 @@ void			eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->philomutex);
 	philo->last_meal = chrono();
-	philo->remainingtime = philo->last_meal + context.time_to_die;
+	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	printstatus(philo, "is eating");
 	philo->meal_count += 1;
-	usleep(context.time_to_eat * 1000);
+	usleep(g_context.time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->philomutex);
 	pthread_mutex_unlock(&philo->philomutexeatcount);
 }

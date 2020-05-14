@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/14 22:47:21 by henri             #+#    #+#             */
+/*   Updated: 2020/05/14 22:47:44 by henri            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/time.h>
-#include <inttypes.h>
-#include <semaphore.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <sys/time.h>
+# include <inttypes.h>
+# include <semaphore.h>
 
 # define PHI_INIT		0
 # define EAT_INIT		1
@@ -42,7 +54,7 @@ typedef struct		s_context
 	sem_t			*semawrite;
 }					t_context;
 
-t_context			context;
+t_context			g_context;
 
 void				putstrfd(char *str, int fd);
 int					ft_atoi(char *str);
@@ -54,7 +66,7 @@ int					printstatus(t_philo *philo, char *str);
 int					lock2forks(t_philo *philo);
 int					sleep_unlock2forks(t_philo *philo);
 int					eat(t_philo *philo);
-void 				clear(void);
-void 				semanames(char *name, int id, int eat);
+void				clear(void);
+void				semanames(char *name, int id, int eat);
 
 #endif

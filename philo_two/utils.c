@@ -6,15 +6,15 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 16:23:05 by henri             #+#    #+#             */
-/*   Updated: 2020/03/29 00:43:58 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:56:35 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int			strcompare(char *s1, char *s2)
+int					strcompare(char *s1, char *s2)
 {
-	int i;
+	int				i;
 
 	i = 0;
 	while (s1[i] && s1[i] == s2[i])
@@ -22,10 +22,10 @@ int			strcompare(char *s1, char *s2)
 	return (s1[i] - s2[i]);
 }
 
-void		putuint64_t(int fd, uint64_t nbr)
+void				putuint64_t(int fd, uint64_t nbr)
 {
-	int		i;
-	char	tmp[15];
+	int				i;
+	char			tmp[15];
 
 	if (nbr == 0)
 		tmp[0] = '0';
@@ -48,7 +48,7 @@ void		putuint64_t(int fd, uint64_t nbr)
 ** 	printf("Timer : %" PRIu64 "\n", chrono());
 */
 
-uint64_t	chrono(void)
+uint64_t			chrono(void)
 {
 	uint64_t		time;
 	struct timeval	tv;
@@ -58,7 +58,7 @@ uint64_t	chrono(void)
 	return (time);
 }
 
-void	putstrfd(char *str, int fd)
+void				putstrfd(char *str, int fd)
 {
 	while (*str)
 	{
@@ -67,11 +67,11 @@ void	putstrfd(char *str, int fd)
 	}
 }
 
-int		ft_atoi(char *str)
+int					ft_atoi(char *str)
 {
-	int		i;
-	int		sign;
-	int		result;
+	int				i;
+	int				sign;
+	int				result;
 
 	i = 0;
 	sign = 1;

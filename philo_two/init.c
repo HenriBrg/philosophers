@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 12:43:57 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:54:23 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 void			semanames(char *name, int id, int eat)
 {
-	int i;
+	int			i;
 	const char	basename1[6] = "philo-";
 	const char	basename2[10] = "philo-eat-";
 
@@ -42,16 +42,16 @@ void			semanames(char *name, int id, int eat)
 
 void			clear(void)
 {
-	int 		i;
+	int			i;
 	char		name[50];
 
 	i = -1;
 	sem_unlink(SEMAFORKS);
 	sem_unlink(SEMAWRITE);
 	sem_unlink(SEMADEATH);
-	if (context.philos)
+	if (g_context.philos)
 	{
-		while (++i < context.philosophers)
+		while (++i < g_context.philosophers)
 		{
 			semanames(name, i + 1, PHI_INIT);
 			sem_unlink(name);
@@ -59,7 +59,7 @@ void			clear(void)
 			sem_unlink(name);
 		}
 	}
-	free(context.philos);
+	free(g_context.philos);
 }
 
 static int		initphilos(void)
@@ -68,19 +68,19 @@ static int		initphilos(void)
 	char		name[50];
 
 	i = 0;
-	while (i < context.philosophers)
+	while (i < g_context.philosophers)
 	{
-		context.philos[i].pos = i;
-		context.philos[i].last_meal = 0;
-		context.philos[i].meal_count = 0;
+		g_context.philos[i].pos = i;
+		g_context.philos[i].last_meal = 0;
+		g_context.philos[i].meal_count = 0;
 		semanames(name, i + 1, PHI_INIT);
 		sem_unlink(name);
-		if ((context.philos[i].philosema =
+		if ((g_context.philos[i].philosema =
 			sem_open(name, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
 			return (1);
 		semanames(name, i + 1, EAT_INIT);
 		sem_unlink(name);
-		if ((context.philos[i].philosemaeatcount =
+		if ((g_context.philos[i].philosemaeatcount =
 			sem_open(name, O_CREAT | O_EXCL, 0644, 0)) == SEM_FAILED)
 			return (1);
 		i++;
@@ -93,13 +93,13 @@ static int		initsemas(int philonum)
 	sem_unlink(SEMAFORKS);
 	sem_unlink(SEMAWRITE);
 	sem_unlink(SEMADEATH);
-	if ((context.semaforks =
+	if ((g_context.semaforks =
 		sem_open(SEMAFORKS, O_CREAT | O_EXCL, 0644, philonum)) == SEM_FAILED)
 		return (1);
-	if ((context.semawrite =
+	if ((g_context.semawrite =
 		sem_open(SEMAWRITE, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
 		return (1);
-	if ((context.semadeath =
+	if ((g_context.semadeath =
 		sem_open(SEMADEATH, O_CREAT | O_EXCL, 0644, 0)) == SEM_FAILED)
 		return (1);
 	return (0);
@@ -122,22 +122,22 @@ static int		initsemas(int philonum)
 
 int				initcontext(int ac, char **av)
 {
-	context.philosophers = ft_atoi(av[1]);
-	context.time_to_die = ft_atoi(av[2]);
-	context.time_to_eat = ft_atoi(av[3]);
-	context.time_to_sleep = ft_atoi(av[4]);
-	context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
-	if (context.philosophers < 2 || context.philosophers > 100 ||
-		context.time_to_die < 50 || context.time_to_eat < 50 ||
-		context.time_to_sleep < 50 || context.maxeat < 0)
+	g_context.philosophers = ft_atoi(av[1]);
+	g_context.time_to_die = ft_atoi(av[2]);
+	g_context.time_to_eat = ft_atoi(av[3]);
+	g_context.time_to_sleep = ft_atoi(av[4]);
+	g_context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
+	if (g_context.philosophers < 2 || g_context.philosophers > 100 ||
+		g_context.time_to_die < 50 || g_context.time_to_eat < 50 ||
+		g_context.time_to_sleep < 50 || g_context.maxeat < 0)
 		return (1);
-	context.philos = NULL;
-	context.globaleatcoutner = 0;
-	if ((context.philos = malloc(sizeof(t_philo) * context.philosophers)) == 0)
+	g_context.philos = NULL;
+	g_context.globaleatcoutner = 0;
+	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))
 		return (1);
 	if (initphilos())
 		return (1);
-	if (initsemas(context.philosophers))
+	if (initsemas(g_context.philosophers))
 		return (1);
 	return (0);
 }

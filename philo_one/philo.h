@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/05/14 22:32:54 by henri             #+#    #+#             */
+/*   Updated: 2020/05/14 22:36:59 by henri            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/time.h>
-#include <inttypes.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <sys/time.h>
+# include <inttypes.h>
 
 /*
 ** philosophers = nombre de philosophes et de fourchettes
@@ -43,7 +55,7 @@ typedef struct		s_context
 	pthread_mutex_t	mutexwrite;
 }					t_context;
 
-t_context			context;
+t_context			g_context;
 
 void				putstrfd(char *str, int fd);
 int					ft_atoi(char *str);
@@ -55,6 +67,6 @@ void				printstatus(t_philo *philo, char *str);
 void				lock2forks(t_philo *philo);
 void				sleep_unlock2forks(t_philo *philo);
 void				eat(t_philo *philo);
-void 				clear(void);
+void				clear(void);
 
 #endif

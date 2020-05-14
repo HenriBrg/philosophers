@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/04/01 18:11:53 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/14 22:56:16 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,21 +30,21 @@
 
 void			*watchingmaxeat(void *arg)
 {
-	int	i;
-	int max;
+	int			i;
+	int			max;
 
 	max = -1;
 	(void)arg;
-	while (++max < context.maxeat)
+	while (++max < g_context.maxeat)
 	{
 		i = -1;
-		while (++i < context.philosophers)
-			if (sem_wait(context.philos[i].philosemaeatcount))
+		while (++i < g_context.philosophers)
+			if (sem_wait(g_context.philos[i].philosemaeatcount))
 				return ((void*)1);
 	}
 	if (printstatus(NULL, "maximum meal reached"))
 		return ((void*)1);
-	if (sem_post(context.semadeath))
+	if (sem_post(g_context.semadeath))
 		return ((void*)1);
 	return ((void*)0);
 }
@@ -63,9 +63,9 @@ void			*watchingmaxeat(void *arg)
 ** check si le philo meurt
 */
 
-static void			*watching(void *philo_uncasted)
+static void		*watching(void *philo_uncasted)
 {
-	t_philo 		*philo;
+	t_philo		*philo;
 
 	philo = (t_philo*)philo_uncasted;
 	while (42)
@@ -77,7 +77,7 @@ static void			*watching(void *philo_uncasted)
 			printstatus(philo, "died");
 			if (sem_post(philo->philosema))
 				return ((void*)1);
-			if (sem_post(context.semadeath))
+			if (sem_post(g_context.semadeath))
 				return ((void*)1);
 			return ((void*)0);
 		}
@@ -97,14 +97,14 @@ static void			*watching(void *philo_uncasted)
 ** 	- Si oui le philo mange, libère les 2 fourchettes, dors puis pense
 */
 
-static void			*noeatlimit(void *philo_uncasted)
+static void		*noeatlimit(void *philo_uncasted)
 {
-	t_philo 	*philo;
+	t_philo		*philo;
 	pthread_t	subthread;
 
 	philo = (t_philo*)philo_uncasted;
 	philo->last_meal = chrono();
-	philo->remainingtime = philo->last_meal + context.time_to_die;
+	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	if (pthread_create(&subthread, NULL, &watching, philo))
 		return ((void*)1);
 	pthread_detach(subthread);
@@ -118,7 +118,7 @@ static void			*noeatlimit(void *philo_uncasted)
 			return ((void*)1);
 		if (printstatus(philo, "is thinking"))
 			return ((void*)1);
- 	}
+	}
 	return ((void*)0);
 }
 
@@ -135,16 +135,16 @@ static int		start(void)
 	pthread_t	thread;
 
 	i = -1;
-	context.timer = chrono();
-	if (context.maxeat)
+	g_context.timer = chrono();
+	if (g_context.maxeat)
 	{
 		if (pthread_create(&thread, NULL, &watchingmaxeat, NULL))
 			return (1);
 		pthread_detach(thread);
 	}
-	while (++i < context.philosophers)
+	while (++i < g_context.philosophers)
 	{
-		philo = (void*)(&context.philos[i]);
+		philo = (void*)(&g_context.philos[i]);
 		if (pthread_create(&thread, NULL, &noeatlimit, philo))
 			return (1);
 		pthread_detach(thread);
@@ -162,7 +162,7 @@ static int		start(void)
 ** Pour rappel, un "lock sur mutex déjà lock" = "wait jusqu'à unlock du mutex"
 */
 
-int		main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	if (ac < 5 || ac > 6)
 	{
@@ -181,7 +181,7 @@ int		main(int ac, char **av)
 		putstrfd("Error: core function\n", 2);
 		return (1);
 	}
-	sem_wait(context.semadeath);
+	sem_wait(g_context.semadeath);
 	clear();
 	return (0);
 }
