@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/14 22:36:34 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/15 18:02:03 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** n'a pas encore mangé
 ** Sachant cela, on delock à chaque fois que le philo X mange et
 ** on le relock ici en incrémentant i
-** On itère de manière croissant sur les philos donc si le philo 5 mange avant
+** On itère de manière croissante sur les philos donc si le philo 5 mange avant
 ** le 2, pas de problème car le mutex du 5 sera delock instantanément
 ** On fait cela "context.maxeat" fois
 **
