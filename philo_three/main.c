@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/14 23:07:34 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/20 19:41:14 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,10 +152,15 @@ static int		start(void)
 **
 ** Ensuite on start() qui fork() pour chaque philo du quel on call noeatlimit()
 ** dans laquelle on essaie en loop infinie de manger etc ...
+**
+** Usefull commands : pkill -f <match processus name>
 */
 
 int				main(int ac, char **av)
 {
+	int i;
+
+	i = 0;
 	if (ac < 5 || ac > 6)
 	{
 		putstrfd("Error: wrong number of arguments\n", 2);
@@ -174,6 +179,8 @@ int				main(int ac, char **av)
 		return (1);
 	}
 	sem_wait(g_context.semadeath);
+	while (i < g_context.philosophers)
+		kill(g_context.philos[i++].philopid, SIGKILL);
 	clear();
 	return (0);
 }

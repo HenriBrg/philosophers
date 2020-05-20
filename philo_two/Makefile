@@ -18,16 +18,7 @@ all: $(NAME)
 	gcc $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	gcc $(FLAGS) $(SRCS) -o $(NAME)
-
-run1: $(NAME)
-	./philo_two 4 410 200 200
-
-run2: $(NAME)
-	./philo_two 4 310 200 100
-
-run3: $(NAME)
-	./philo_two 4 410 200 200 2
+	gcc $(FLAGS) $(SRCS) -o $(NAME) -lpthread
 
 clean:
 	rm -f $(OBJS)
