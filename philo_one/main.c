@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 18:33:42 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:35:20 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ static void		*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
-		usleep(25);
 		pthread_mutex_lock(&philo->philomutex);
 		if (philo->remainingtime < chrono())
 		{
@@ -88,7 +87,7 @@ static void		*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
-		usleep(250);
+		usleep(1000);
 	}
 }
 
@@ -106,6 +105,7 @@ static void		*noeatlimit(void *philo_uncasted)
 	t_philo		*philo;
 	pthread_t	subthread;
 
+	g_context.timer = chrono();
 	philo = (t_philo*)philo_uncasted;
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + g_context.time_to_die;
@@ -135,7 +135,6 @@ static int		start(void)
 	pthread_t	thread;
 
 	i = -1;
-	g_context.timer = chrono();
 	if (g_context.maxeat)
 	{
 		if (pthread_create(&thread, NULL, &watchingmaxeat, NULL))
