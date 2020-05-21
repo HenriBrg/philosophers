@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:44:47 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 20:52:53 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ void			printstatus(t_philo *philo, char *str)
 /*
 ** On lock 2 fourchettes pour pouvoir manger, si indisponible on attend
 ** Sachant que les fourchettes sont au centre et non entre chaque philosophe
-**
-** usleep(500) sur conseil, idk why
 */
 
 void			lock2forks(t_philo *philo)
