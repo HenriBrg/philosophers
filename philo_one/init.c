@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:26:47 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:49:21 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static int		initmutex(int number)
 
 int				initcontext(int ac, char **av)
 {
+	clear();
 	g_context.philosophers = ft_atoi(av[1]);
 	g_context.time_to_die = ft_atoi(av[2]);
 	g_context.time_to_eat = ft_atoi(av[3]);
