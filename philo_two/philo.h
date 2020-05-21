@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:47:21 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 18:57:13 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:56:14 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <sys/time.h>
 # include <inttypes.h>
 # include <semaphore.h>
+# include <fcntl.h>
 
 # define PHI_INIT		0
 # define EAT_INIT		1

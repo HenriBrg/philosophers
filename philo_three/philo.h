@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:57:01 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 18:55:26 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:56:09 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <semaphore.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <fcntl.h>
 
 # define PHI_INIT		0
 # define EAT_INIT		1

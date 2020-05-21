@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:52:56 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:54:20 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ static void		*watching(void *philo_uncasted)
 {
 	t_philo		*philo;
 
-	usleep(1000);
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
+		usleep(25);
 		pthread_mutex_lock(&philo->philomutex);
 		if (philo->remainingtime < chrono())
 		{
@@ -88,7 +88,7 @@ static void		*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
-		usleep(500);
+		usleep(50);
 	}
 }
 
