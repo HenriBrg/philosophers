@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:30:09 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:39:43 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void			printstatus(t_philo *philo, char *str)
 
 void			lock2forks(t_philo *philo)
 {
-	pthread_mutex_lock(&g_context.mutexforks[philo->lfork]);
-	printstatus(philo, "has taken a fork");
 	pthread_mutex_lock(&g_context.mutexforks[philo->rfork]);
+	printstatus(philo, "has taken a fork");
+	pthread_mutex_lock(&g_context.mutexforks[philo->lfork]);
 	printstatus(philo, "has taken a fork");
 }
 
