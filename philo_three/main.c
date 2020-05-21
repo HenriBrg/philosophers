@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/20 19:41:14 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 18:38:12 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void		*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
+		usleep(25);
 		if (sem_wait(philo->philosema))
 			return ((void*)1);
 		if (philo->remainingtime < chrono())
@@ -83,7 +84,7 @@ static void		*watching(void *philo_uncasted)
 		}
 		if (sem_post(philo->philosema))
 			return ((void*)1);
-		usleep(1000);
+		usleep(250);
 	}
 	return ((void*)0);
 }

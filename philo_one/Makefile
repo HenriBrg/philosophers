@@ -15,10 +15,10 @@ DEBUG = -g -fsanitize=address
 all: $(NAME)
 
 .c.o:
-	gcc $(FLAGS) -c $< -o $@
+	clang $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	gcc $(FLAGS) $(SRCS) -o $(NAME) -lpthread
+	clang $(FLAGS) $(SRCS) -o $(NAME) -lpthread
 
 clean:
 	rm -f $(OBJS)

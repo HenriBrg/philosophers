@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/20 18:41:49 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 18:56:48 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,10 @@ void			clear(void)
 		}
 	}
 	free(g_context.philos);
+	sem_close(g_context.semaforks);
+	sem_close(g_context.semadeath);
+	sem_close(g_context.semawrite);
+	sem_close(g_context.semaprocessdeath);
 }
 
 static int		initphilos(void)
@@ -77,12 +81,12 @@ static int		initphilos(void)
 		semanames(name, i + 1, PHI_INIT);
 		sem_unlink(name);
 		if ((g_context.philos[i].philosema =
-			sem_open(name, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
+			sem_open(name, O_CREAT, 0644, 1)) == SEM_FAILED)
 			return (1);
 		semanames(name, i + 1, EAT_INIT);
 		sem_unlink(name);
 		if ((g_context.philos[i].philosemaeatcount =
-			sem_open(name, O_CREAT | O_EXCL, 0644, 0)) == SEM_FAILED)
+			sem_open(name, O_CREAT, 0644, 0)) == SEM_FAILED)
 			return (1);
 		i++;
 	}
@@ -96,16 +100,16 @@ static int		initsemas(int philonum)
 	sem_unlink(SEMADEATH);
 	sem_unlink(SEMAPROCESSDEATH);
 	if ((g_context.semaforks =
-		sem_open(SEMAFORKS, O_CREAT | O_EXCL, 0644, philonum)) == SEM_FAILED)
+		sem_open(SEMAFORKS, O_CREAT, 0644, philonum)) == SEM_FAILED)
 		return (1);
 	if ((g_context.semawrite =
-		sem_open(SEMAWRITE, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
+		sem_open(SEMAWRITE, O_CREAT, 0644, 1)) == SEM_FAILED)
 		return (1);
 	if ((g_context.semadeath =
-		sem_open(SEMADEATH, O_CREAT | O_EXCL, 0644, 0)) == SEM_FAILED)
+		sem_open(SEMADEATH, O_CREAT, 0644, 0)) == SEM_FAILED)
 		return (1);
 	if ((g_context.semaprocessdeath =
-		sem_open(SEMAPROCESSDEATH, O_CREAT | O_EXCL, 0644, 1)) == SEM_FAILED)
+		sem_open(SEMAPROCESSDEATH, O_CREAT, 0644, 1)) == SEM_FAILED)
 		return (1);
 	return (0);
 }
@@ -133,8 +137,8 @@ int				initcontext(int ac, char **av)
 	g_context.time_to_sleep = ft_atoi(av[4]);
 	g_context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
 	if (g_context.philosophers < 2 || g_context.philosophers > 200 ||
-		g_context.time_to_die < 50 || g_context.time_to_eat < 50 ||
-		g_context.time_to_sleep < 50 || g_context.maxeat < 0)
+		g_context.time_to_die < 60 || g_context.time_to_eat < 60 ||
+		g_context.time_to_sleep < 60 || g_context.maxeat < 0)
 		return (1);
 	g_context.philos = NULL;
 	g_context.semaforks = NULL;

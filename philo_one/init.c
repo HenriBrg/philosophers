@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/14 22:37:21 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 18:33:11 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void		initphilos(int number)
 	i = 0;
 	while (i < number)
 	{
+		pthread_mutex_destroy(&g_context.philos[i].philomutex);
+		pthread_mutex_destroy(&g_context.philos[i].philomutexeatcount);
 		g_context.philos[i].pos = i;
 		g_context.philos[i].last_meal = 0;
 		g_context.philos[i].meal_count = 0;
@@ -67,12 +69,17 @@ static int		initmutex(int number)
 {
 	int			i;
 
+	pthread_mutex_destroy(&g_context.mutexdeath);
+	pthread_mutex_destroy(&g_context.mutexwrite);
 	g_context.mutexforks = NULL;
 	if ((g_context.mutexforks = malloc(sizeof(pthread_mutex_t) * number)) == 0)
 		return (1);
 	i = -1;
 	while (++i < number)
+	{
+		pthread_mutex_destroy(&g_context.mutexforks[i]);
 		pthread_mutex_init(&g_context.mutexforks[i], NULL);
+	}
 	pthread_mutex_init(&g_context.mutexdeath, NULL);
 	pthread_mutex_lock(&g_context.mutexdeath);
 	pthread_mutex_init(&g_context.mutexwrite, NULL);
@@ -87,8 +94,8 @@ int				initcontext(int ac, char **av)
 	g_context.time_to_sleep = ft_atoi(av[4]);
 	g_context.maxeat = (ac == 6) ? ft_atoi(av[5]) : 0;
 	if (g_context.philosophers < 2 || g_context.philosophers > 200 ||
-		g_context.time_to_die < 50 || g_context.time_to_eat < 50 ||
-		g_context.time_to_sleep < 50 || g_context.maxeat < 0)
+		g_context.time_to_die < 60 || g_context.time_to_eat < 60 ||
+		g_context.time_to_sleep < 60 || g_context.maxeat < 0)
 		return (1);
 	g_context.philos = NULL;
 	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))

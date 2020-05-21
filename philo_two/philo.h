@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:47:21 by henri             #+#    #+#             */
-/*   Updated: 2020/05/14 22:47:44 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 18:57:13 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@
 # define PHI_INIT		0
 # define EAT_INIT		1
 
-# define SEMAFORKS		"SEMAFORKS"
-# define SEMAWRITE		"SEMAWRITE"
-# define SEMADEATH		"SEMADEATH"
+# define SEMAFORKS		"/SEMAFORKS"
+# define SEMAWRITE		"/SEMAWRITE"
+# define SEMADEATH		"/SEMADEATH"
 
 typedef struct		s_philo
 {
