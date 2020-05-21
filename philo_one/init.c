@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:49:21 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 20:00:10 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void			clear(void)
 			pthread_mutex_destroy(&g_context.philos[i].philomutexeatcount);
 		}
 	free(g_context.philos);
+	g_context.philos = NULL;
 	pthread_mutex_destroy(&g_context.mutexdeath);
 	pthread_mutex_destroy(&g_context.mutexwrite);
 }

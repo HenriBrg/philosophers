@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 18:58:22 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:59:47 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void			clear(void)
 		}
 	}
 	free(g_context.philos);
+	g_context.philos = NULL;
 	sem_close(g_context.semaforks);
 	sem_close(g_context.semadeath);
 	sem_close(g_context.semawrite);
@@ -125,6 +126,7 @@ static int		initsemas(int philonum)
 
 int				initcontext(int ac, char **av)
 {
+	clear();
 	g_context.philosophers = ft_atoi(av[1]);
 	g_context.time_to_die = ft_atoi(av[2]);
 	g_context.time_to_eat = ft_atoi(av[3]);

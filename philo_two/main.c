@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 18:35:10 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 19:58:52 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void		*watching(void *philo_uncasted)
 		}
 		if (sem_post(philo->philosema))
 			return ((void*)1);
-		usleep(250);
+		usleep(100);
 	}
 	return ((void*)0);
 }
