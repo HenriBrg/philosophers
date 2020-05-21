@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:58:52 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/21 20:23:39 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ static void		*noeatlimit(void *philo_uncasted)
 	pthread_t	subthread;
 
 	philo = (t_philo*)philo_uncasted;
+	g_context.timer = chrono();
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	if (pthread_create(&subthread, NULL, &watching, philo))
@@ -136,7 +137,6 @@ static int		start(void)
 	pthread_t	thread;
 
 	i = -1;
-	g_context.timer = chrono();
 	if (g_context.maxeat)
 	{
 		if (pthread_create(&thread, NULL, &watchingmaxeat, NULL))
