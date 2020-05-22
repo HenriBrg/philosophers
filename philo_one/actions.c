@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/22 11:56:39 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/22 12:09:40 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ void			printstatus(t_philo *philo, char *str)
 /*
 ** On lock 2 fourchettes pour pouvoir manger, si indisponible on attend
 ** Sachant que les fourchettes sont au centre et non entre chaque philosophe
+** struct timespec ts;
+** ts.tv_sec = 0;
+** ts.tv_nsec = g_context.time_to_sleep * 1000000;
+** nanosleep(&ts, NULL);
 */
 
 void			lock2forks(t_philo *philo)
@@ -51,19 +55,12 @@ void			lock2forks(t_philo *philo)
 	printstatus(philo, "has taken a fork");
 }
 
-
-
 void			sleep_unlock2forks(t_philo *philo)
 {
 	printstatus(philo, "is sleeping");
 	pthread_mutex_unlock(&g_context.mutexforks[philo->lfork]);
 	pthread_mutex_unlock(&g_context.mutexforks[philo->rfork]);
-	struct timespec ts;
-	ts.tv_sec = 0;
-	ts.tv_nsec = g_context.time_to_sleep * 1000000;
-	nanosleep(&ts, NULL);
-	// usleep(g_context.time_to_sleep * 1000);
-
+	usleep(g_context.time_to_sleep * 1000);
 }
 
 /*
@@ -78,15 +75,7 @@ void			eat(t_philo *philo)
 	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	printstatus(philo, "is eating");
 	philo->meal_count += 1;
-
-
-	struct timespec ts;
-	ts.tv_sec = 0;
-	ts.tv_nsec = g_context.time_to_eat * 1000000;
-	nanosleep(&ts, NULL);
-	// usleep(g_context.time_to_eat * 1000);
-
-
+	usleep(g_context.time_to_eat * 1000);
 	pthread_mutex_unlock(&philo->philomutex);
 	pthread_mutex_unlock(&philo->philomutexeatcount);
 }
