@@ -1,7 +1,9 @@
+Pourquoi usleep est imprécis, surtout sur une VM ? https://stackoverflow.com/questions/12777254/time-delay-in-c-usleep
+Pourquoi corriger usleep semble une fausse bonne idée ? https://frenchfries.net/paul/dfly/nanosleep.html
+	- le syscall gettimeofday prend du temps
 
 1er Test [Jeudi 21/05 23h] [ commit cd63bad4b86a47e0954e49e0ec5bcf421f70bd52 ]
 2nd Test [Vendredi 22/05 11h] [ Fixé : 4 310 200 100 sur philo_two ]
-
 
 -------------------->   MAC   <--------------------
 
