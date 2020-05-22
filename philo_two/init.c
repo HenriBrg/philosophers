@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 20:23:13 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/22 11:17:52 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,6 @@ void			clear(void)
 	sem_unlink("/SEMAFORKS");
 	sem_unlink("/SEMAWRITE");
 	sem_unlink("/SEMADEATH");
-	sem_close(g_context.semaforks);
-	sem_close(g_context.semadeath);
-	sem_close(g_context.semawrite);
 	free(g_context.philos);
 	g_context.philos = NULL;
 }
