@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:47:21 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:56:14 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/26 22:30:52 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define SEMAFORKS		"/SEMAFORKS"
 # define SEMAWRITE		"/SEMAWRITE"
 # define SEMADEATH		"/SEMADEATH"
+# define TAKEFORKS		"/TAKEFORKS"
 
 typedef struct		s_philo
 {
@@ -68,6 +69,5 @@ int					lock2forks(t_philo *philo);
 int					sleep_unlock2forks(t_philo *philo);
 int					eat(t_philo *philo);
 void				clear(void);
-void				semanames(char *name, int id, int eat);
 
 #endif

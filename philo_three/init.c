@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 20:00:21 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/26 22:49:39 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 ** ou alors 1 si philo-eat-id
 */
 
-void			semanames(char *name, int id, int eat)
+static void			semanames(char *name, int id, int eat)
 {
 	int			i;
 	const char	basename1[6] = "philo-";
@@ -143,7 +143,6 @@ int				initcontext(int ac, char **av)
 		g_context.time_to_sleep < 60 || g_context.maxeat < 0)
 		return (1);
 	g_context.philos = NULL;
-	g_context.semaforks = NULL;
 	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))
 		return (1);
 	if (initphilos())

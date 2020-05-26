@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 20:52:57 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/26 21:30:13 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 ** par respect pour le prototype
 */
 
-void			*watchingmaxeat(void *arg)
+static void		*watchingmaxeat(void *arg)
 {
 	int	i;
 	int max;
@@ -78,7 +78,6 @@ static void		*watching(void *philo_uncasted)
 	philo = (t_philo*)philo_uncasted;
 	while (42)
 	{
-		usleep(25);
 		pthread_mutex_lock(&philo->philomutex);
 		if (philo->remainingtime < chrono())
 		{
@@ -88,7 +87,7 @@ static void		*watching(void *philo_uncasted)
 			return ((void*)0);
 		}
 		pthread_mutex_unlock(&philo->philomutex);
-		usleep(100);
+		usleep(1000);
 	}
 }
 
@@ -114,13 +113,7 @@ static void		*noeatlimit(void *philo_uncasted)
 		return ((void*)1);
 	pthread_detach(subthread);
 	while (42)
-	{
-		lock2forks(philo);
 		eat(philo);
-		sleep_unlock2forks(philo);
-		printstatus(philo, "is thinking");
-		usleep(100);
-	}
 	return ((void*)0);
 }
 

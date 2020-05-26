@@ -20,6 +20,9 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	clang $(FLAGS) $(SRCS) -o $(NAME) -lpthread
 
+x:
+	@./$(NAME) 4 410 200 200
+
 clean:
 	rm -f $(OBJS)
 

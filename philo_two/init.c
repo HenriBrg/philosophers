@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/22 11:17:52 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/26 22:30:33 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 ** ou alors 1 si philo-eat-id
 */
 
-void			semanames(char *name, int id, int eat)
+static void			semanames(char *name, int id, int eat)
 {
 	int			i;
 	const char	basename1[6] = "philo-";

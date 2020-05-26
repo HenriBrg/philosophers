@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:57:01 by henri             #+#    #+#             */
-/*   Updated: 2020/05/21 19:56:09 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/26 22:40:12 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int					lock2forks(t_philo *philo);
 int					sleep_unlock2forks(t_philo *philo);
 int					eat(t_philo *philo);
 void				clear(void);
-void				semanames(char *name, int id, int eat);
 int					threadmaxeat(void);
 void				*watchingmaxeat(void *arg);
 
