@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/26 22:30:25 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/27 22:47:10 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 ** par respect pour le prototype
 */
 
-static void			*watchingmaxeat(void *arg)
+static void		*watchingmaxeat(void *arg)
 {
 	int			i;
 	int			max;
