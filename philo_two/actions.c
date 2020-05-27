@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:20:53 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/27 22:24:45 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int				eat(t_philo *philo)
 	if (sem_wait(philo->philosema))
 		return (1);
 	philo->last_meal = chrono();
-	philo->remainingtime = philo->last_meal + g_context.time_to_die + 10000;
+	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	if (printstatus(philo, "is eating"))
 		return (1);
 	philo->meal_count += 1;

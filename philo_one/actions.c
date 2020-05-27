@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:18:02 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/27 22:24:53 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void			eat(t_philo *philo)
 	lock2forks(philo);
 	pthread_mutex_lock(&philo->philomutex);
 	philo->last_meal = chrono();
-	philo->remainingtime = philo->last_meal + g_context.time_to_die + 10000;
+	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	printstatus(philo, "is eating");
 	philo->meal_count += 1;
 	usleep(g_context.time_to_eat * 1000);
