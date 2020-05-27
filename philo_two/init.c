@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:31:38 by henri            ###   ########.fr       */
+/*   Updated: 2020/05/27 22:37:10 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int				initcontext(int ac, char **av)
 	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))
 		return (1);
 	if (g_context.time_to_die > 400)
-		g_context.time_to_die += 5;
+		g_context.time_to_die += 10;
 	if (initphilos())
 		return (1);
 	if (initsemas(g_context.philosophers))
