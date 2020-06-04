@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:37:03 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/04 15:18:50 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ int				initcontext(int ac, char **av)
 		g_context.time_to_sleep < 60 || g_context.maxeat < 0)
 		return (1);
 	g_context.philos = NULL;
-	if (g_context.time_to_die > 400)
-		g_context.time_to_die += 10;
+	// if (g_context.time_to_die > 400)
+	// 	g_context.time_to_die += 10;
 	if (!(g_context.philos = malloc(sizeof(t_philo) * g_context.philosophers)))
 		return (1);
 	initphilos(g_context.philosophers);

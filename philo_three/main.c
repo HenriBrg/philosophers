@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/26 22:44:46 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/04 15:27:08 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void			*watchingmaxeat(void *arg)
 
 	max = -1;
 	(void)arg;
+	usleep(100);
 	while (++max < g_context.maxeat)
 	{
 		i = -1;
@@ -168,7 +169,7 @@ int				main(int ac, char **av)
 		putstrfd("Error: initialization\n", 2);
 		return (1);
 	}
-	if (threadmaxeat() || start())
+	if (start() || threadmaxeat())
 	{
 		clear();
 		putstrfd("Error: core function\n", 2);
