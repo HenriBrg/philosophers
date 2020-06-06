@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:24:29 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 22:32:37 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int				sleep_unlock2forks(t_philo *philo)
 	usleep(g_context.time_to_sleep * 1000);
 	if (printstatus(philo, "is thinking"))
 		return (1);
+	if ((philo->pos + 1) % 2 == 0)
+		usleep(500);
 	return (0);
 }
 
@@ -84,6 +86,10 @@ int				sleep_unlock2forks(t_philo *philo)
 
 int				eat(t_philo *philo)
 {
+
+	if (sem_wait(g_context.semaskforks))
+		return (1);
+
 	if (sem_wait(g_context.semaforks))
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
@@ -92,6 +98,10 @@ int				eat(t_philo *philo)
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
 		return (1);
+
+	if (sem_post(g_context.semaskforks))
+		return (1);
+
 	if (sem_wait(philo->philosema))
 		return (1);
 	philo->last_meal = chrono();

@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/06/04 15:27:08 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 22:58:46 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void		*watching(void *philo_uncasted)
 		}
 		if (sem_post(philo->philosema))
 			return ((void*)1);
-		usleep(1000);
+		usleep(500);
 	}
 	return ((void*)0);
 }
@@ -102,8 +102,11 @@ static int		noeatlimit(void *philo_uncasted)
 {
 	t_philo		*philo;
 	pthread_t	subthread;
+	int			usecwait;
 
 	philo = (t_philo*)philo_uncasted;
+	usecwait = (philo->pos - g_context.philosophers) * -100;
+	usleep(usecwait);
 	philo->last_meal = chrono();
 	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	if (pthread_create(&subthread, NULL, &watching, philo))

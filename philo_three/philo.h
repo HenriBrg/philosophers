@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/14 22:57:01 by henri             #+#    #+#             */
-/*   Updated: 2020/05/26 22:40:12 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 22:24:12 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define SEMAWRITE		"/SEMAWRITE"
 # define SEMADEATH		"/SEMADEATH"
 # define SEMAPROCESSDEATH	"/SEMAPROCESSDEATH"
+# define ASKTAKEFORKS	"/ASKTAKEFORKS"
 
 typedef struct		s_philo
 {
@@ -64,6 +65,7 @@ typedef struct		s_context
 	uint64_t		time_to_sleep;
 	t_philo			*philos;
 	sem_t			*semaforks;
+	sem_t			*semaskforks;
 	sem_t			*semadeath;
 	sem_t			*semawrite;
 	sem_t			*semaprocessdeath;
