@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/06/06 22:58:46 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 23:12:57 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void			*watchingmaxeat(void *arg)
 
 	max = -1;
 	(void)arg;
-	usleep(100);
 	while (++max < g_context.maxeat)
 	{
 		i = -1;
@@ -138,7 +137,6 @@ static int		start(void)
 			noeatlimit(&g_context.philos[i]);
 			exit(0);
 		}
-		usleep(100);
 	}
 	return (0);
 }
