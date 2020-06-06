@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:24:53 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 20:28:29 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void			printstatus(t_philo *philo, char *str)
 
 void			lock2forks(t_philo *philo)
 {
-	if (philo->pos % 2 == 0)
+	if ((philo->pos + 1) % 2 == 0)
 	{
 		pthread_mutex_lock(&g_context.mutexforks[philo->rfork]);
 		printstatus(philo, "has taken a fork");
@@ -78,12 +78,27 @@ void			eat(t_philo *philo)
 	philo->remainingtime = philo->last_meal + g_context.time_to_die;
 	printstatus(philo, "is eating");
 	philo->meal_count += 1;
+
+	/*
+	struct timeval timeBef;
+	struct timeval timeAft;
+	gettimeofday(&timeBef, 0);
+	gettimeofday(&timeAft, 0);
+	printf("TIME GAP = %d\n", (timeAft.tv_usec - timeBef.tv_usec) / 1000);
+	*/
+
 	usleep(g_context.time_to_eat * 1000);
+
+	pthread_mutex_unlock(&g_context.mutexforks[philo->lfork]);
+	pthread_mutex_unlock(&g_context.mutexforks[philo->rfork]);
 	pthread_mutex_unlock(&philo->philomutex);
 	pthread_mutex_unlock(&philo->philomutexeatcount);
 	printstatus(philo, "is sleeping");
-	pthread_mutex_unlock(&g_context.mutexforks[philo->lfork]);
-	pthread_mutex_unlock(&g_context.mutexforks[philo->rfork]);
 	usleep(g_context.time_to_sleep * 1000);
 	printstatus(philo, "is thinking");
+	if ((philo->pos + 1) % 2 == 0)
+		usleep(500);
+	// usleep ici ? parceque si 2 philos attendent, alors
+	// de cette maniere le philo qui attendait prendra la fourchette avant le philosopher qui vient tout juste de finir de manger
+
 }

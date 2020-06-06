@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/26 12:07:04 by henri             #+#    #+#             */
-/*   Updated: 2020/05/27 22:13:42 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 17:38:36 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ static void		*watchingmaxeat(void *arg)
 **
 **
 ** TEST usleep precision
-** # include <sys/time.h>
 ** struct timeval timeBef;
 ** struct timeval timeAft;
 ** gettimeofday(&timeBef, 0);

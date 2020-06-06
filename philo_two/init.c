@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/06/04 15:18:44 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/06 21:41:23 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,18 @@ static int		initsemas(int philonum)
 	sem_unlink(SEMAFORKS);
 	sem_unlink(SEMAWRITE);
 	sem_unlink(SEMADEATH);
+	sem_unlink(ASKTAKEFORKS);
 	if ((g_context.semaforks =
-		sem_open(SEMAFORKS, O_CREAT, 0644, philonum)) == SEM_FAILED)
+		sem_open(SEMAFORKS, O_CREAT, 0666, philonum)) == SEM_FAILED)
+		return (1);
+	if ((g_context.semaskforks =
+		sem_open(ASKTAKEFORKS, O_CREAT, 0666, 1)) == SEM_FAILED)
 		return (1);
 	if ((g_context.semawrite =
-		sem_open(SEMAWRITE, O_CREAT, 0644, 1)) == SEM_FAILED)
+		sem_open(SEMAWRITE, O_CREAT, 0666, 1)) == SEM_FAILED)
 		return (1);
 	if ((g_context.semadeath =
-		sem_open(SEMADEATH, O_CREAT, 0644, 0)) == SEM_FAILED)
+		sem_open(SEMADEATH, O_CREAT, 0666, 0)) == SEM_FAILED)
 		return (1);
 	return (0);
 }
