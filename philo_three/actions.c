@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/06/07 12:38:42 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 17:50:03 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int				printstatus(t_philo *philo, char *str)
 	return (0);
 }
 
-static void	ft_usleep(unsigned int n)
+static void		ft_usleep(unsigned int n)
 {
-	uint64_t start;
+	uint64_t	start;
 
 	start = chrono();
 	while (1)
@@ -99,10 +99,8 @@ int				sleep_unlock2forks(t_philo *philo)
 
 int				eat(t_philo *philo)
 {
-
 	if (sem_wait(g_context.semaskforks))
 		return (1);
-
 	if (sem_wait(g_context.semaforks))
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
@@ -111,10 +109,8 @@ int				eat(t_philo *philo)
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
 		return (1);
-
 	if (sem_post(g_context.semaskforks))
 		return (1);
-
 	if (sem_wait(philo->philosema))
 		return (1);
 	philo->last_meal = chrono();

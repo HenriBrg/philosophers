@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/06/07 12:38:34 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 15:24:02 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,9 @@ void			lock2forks(t_philo *philo)
 ** printf("TIME GAP = %d\n", (timeAft.tv_usec - timeBef.tv_usec) / 1000);
 */
 
-static void	ft_usleep(unsigned int n)
+static void		ft_usleep(unsigned int n)
 {
-	uint64_t start;
+	uint64_t	start;
 
 	start = chrono();
 	while (1)
@@ -96,7 +96,6 @@ static void	ft_usleep(unsigned int n)
 			break ;
 	}
 }
-
 
 /*
 ** Usleep à la fin car si 2 philos attendent, alors de cette maniere le philo

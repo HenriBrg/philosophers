@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/06/07 12:11:42 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 17:50:12 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void			clear(void)
 	sem_unlink(SEMAPROCESSDEATH);
 	sem_unlink(ASKTAKEFORKS);
 	if (g_context.philos)
-	{
 		while (++i < g_context.philosophers)
 		{
 			semanames(name, i + 1, PHI_INIT);
@@ -60,7 +59,6 @@ void			clear(void)
 			semanames(name, i + 1, EAT_INIT);
 			sem_unlink(name);
 		}
-	}
 	free(g_context.philos);
 	g_context.philos = NULL;
 	sem_close(g_context.semaforks);
@@ -68,7 +66,6 @@ void			clear(void)
 	sem_close(g_context.semawrite);
 	sem_close(g_context.semaprocessdeath);
 	sem_close(g_context.semaskforks);
-
 }
 
 static int		initphilos(void)

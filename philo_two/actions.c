@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/06/07 12:38:52 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 17:48:54 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ int				printstatus(t_philo *philo, char *str)
 	return (x == 1 ? 1 : 0);
 }
 
-static void	ft_usleep(unsigned int n)
+static void		ft_usleep(unsigned int n)
 {
-	uint64_t start;
+	uint64_t	start;
 
 	start = chrono();
 	while (1)
@@ -69,10 +69,8 @@ int				sleep_unlock2forks(t_philo *philo)
 	ft_usleep(g_context.time_to_sleep);
 	if (printstatus(philo, "is thinking"))
 		return (1);
-
 	if ((philo->pos + 1) % 2 == 0)
 		usleep(500);
-
 	return (0);
 }
 
@@ -83,12 +81,8 @@ int				sleep_unlock2forks(t_philo *philo)
 
 int				eat(t_philo *philo)
 {
-
-
 	if (sem_wait(g_context.semaskforks))
 		return (1);
-
-
 	if (sem_wait(g_context.semaforks))
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
@@ -97,12 +91,8 @@ int				eat(t_philo *philo)
 		return (1);
 	if (printstatus(philo, "has taken a fork"))
 		return (1);
-
-
 	if (sem_post(g_context.semaskforks))
 		return (1);
-
-
 	if (sem_wait(philo->philosema))
 		return (1);
 	philo->last_meal = chrono();
@@ -115,6 +105,5 @@ int				eat(t_philo *philo)
 		return (1);
 	if (sem_post(philo->philosemaeatcount))
 		return (1);
-
 	return (0);
 }
