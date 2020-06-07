@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/27 16:43:10 by henri             #+#    #+#             */
-/*   Updated: 2020/06/06 22:28:03 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 12:11:42 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ static int		initsemas(int philonum)
 int				initcontext(int ac, char **av)
 {
 	clear();
+	memset(&g_context, 0, sizeof(g_context));
 	g_context.philosophers = ft_atoi(av[1]);
 	g_context.time_to_die = ft_atoi(av[2]);
 	g_context.time_to_eat = ft_atoi(av[3]);
