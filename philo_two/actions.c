@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/06/06 22:13:01 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 12:15:39 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,19 @@ int				printstatus(t_philo *philo, char *str)
 	return (x == 1 ? 1 : 0);
 }
 
+static void	ft_usleep(unsigned int n)
+{
+	uint64_t start;
+
+	start = chrono();
+	while (1)
+	{
+		usleep(100);
+		if (chrono() - start >= n)
+			break ;
+	}
+}
+
 /*
 ** On lock 2 fourchettes pour pouvoir manger, si indisponible on attend
 ** Sachant que les fourchettes sont au centre et non entre chaque philosophe
@@ -53,10 +66,10 @@ int				sleep_unlock2forks(t_philo *philo)
 		return (1);
 	if (sem_post(g_context.semaforks))
 		return (1);
-	usleep(g_context.time_to_sleep * 1000);
+	ft_usleep(g_context.time_to_sleep);
 	if (printstatus(philo, "is thinking"))
 		return (1);
-	
+
 	if ((philo->pos + 1) % 2 == 0)
 		usleep(500);
 
@@ -97,7 +110,7 @@ int				eat(t_philo *philo)
 	if (printstatus(philo, "is eating"))
 		return (1);
 	philo->meal_count += 1;
-	usleep(g_context.time_to_eat * 1000);
+	ft_usleep(g_context.time_to_eat);
 	if (sem_post(philo->philosema))
 		return (1);
 	if (sem_post(philo->philosemaeatcount))
