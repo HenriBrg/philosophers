@@ -6,7 +6,7 @@
 /*   By: henri <henri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/28 15:38:15 by henri             #+#    #+#             */
-/*   Updated: 2020/06/07 12:15:39 by henri            ###   ########.fr       */
+/*   Updated: 2020/06/07 12:38:52 by henri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	ft_usleep(unsigned int n)
 	start = chrono();
 	while (1)
 	{
-		usleep(100);
+		usleep(50);
 		if (chrono() - start >= n)
 			break ;
 	}
