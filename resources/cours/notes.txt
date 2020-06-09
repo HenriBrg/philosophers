@@ -1,0 +1,37 @@
+Pour wait uniquement le changement de status
+
+waitpid(-1 ...) = tous les process
+WIFEXITED =
+WIFSIGNALED =
+
+if (waitpid(-1, &status, 0) < 0 || ((WIFEXITED(status)
+				|| WIFSIGNALED(status)) && status != 0))
+
+
+				void				ft_usleep(uint64_t time)
+				{
+					uint64_t	i;
+					uint64_t		j;
+
+					i = chrono();
+					while (1)
+					{
+						j = chrono() - i;
+						if (j > time)
+						{
+							printf("AAAAA\n");
+							break ;
+						}
+						usleep(100);
+					}
+
+
+					// uint64_t	now;
+					// printf("i = %" PRId64 "\n", i);
+					// printf(" time : %" PRId64 "\n", chrono());
+					// usleep(time);
+					// printf(" time : %" PRId64 "\n", chrono());
+					// now = chrono();
+					// printf(" now : %" PRId64 "\n", now);
+
+				}
