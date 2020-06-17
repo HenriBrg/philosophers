@@ -1,0 +1,26 @@
+Optimisation efficace
+
+	- Améliorer usleep pour la précision
+	- Memset la variable / structure qui contient toutes les infos
+
+	- usleep(1000) après le time_to_sleep pour que si 2 philos attendent, alors le philo
+	  qui attendait le "premier" prendra la fourchette avant le philosopher
+	  qui vient de finir de sleep
+
+	- philo_two / three : utiliser un semaphore pour autoriser la prise des
+	  deux fourchettes, que personne ne puisse prendre de fourchette pendant qu'un
+	  autre en prend une, comme ça la prochaine libérée lui sera directement attribuée
+
+	- philo_one : faire prendre à la fourchette à gauche ou à droite selon que
+	  l'index du philo soit pair ou impair
+
+	- sleep minimum 1000 usec dans le thread qui chech la death du philo associé
+
+Optimisation probablement useless :
+	- Clear avant d'initialiser tout
+	- Initialiser le timestamp au début du thread et non dans le main de base
+	- Appeler write le moins possible
+	- Fusionner les appels de fonctions
+	- philo_three : démarrer le thread des processus en même temps, avec un
+	  usleep selon l'index du philo, après faut avoir une idée précise du temps
+	  de création d'un processus, 100 usec semblerait-il
